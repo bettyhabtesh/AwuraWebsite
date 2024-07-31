@@ -1,154 +1,156 @@
 import React, { useState } from "react";
-import { AppBar, Box, IconButton, Drawer, List, ListItem, ListItemText } from "@mui/material";
-import { Menu as MenuIcon } from "@mui/icons-material";
-import styled from "styled-components";
+import {
+  AppBar,
+  Box,
+  IconButton,
+  Toolbar,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import logo from "../Assets/logo.svg";
-import { useNavigate, NavLink } from "react-router-dom";
+import styled from "styled-components";
+import { NavLink } from 'react-router-dom';
 
 const Navbar = ({ homeRef, servicesRef, productsRef, clientsRef }) => {
-  const navigate = useNavigate();
-  const [activeLink, setActiveLink] = useState("Home");
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [activeLink, setActiveLink] = useState("");
+  const navigate = useNavigate();
 
-  const handleNavClick = (sectionRef, linkName) => {
-    navigate("/");
+  const handleScrollToSection = (sectionRef, linkName) => {
     setActiveLink(linkName);
-    setTimeout(() => {
-      if (sectionRef?.current) {
-        sectionRef.current.scrollIntoView({ behavior: "smooth" });
-      }
-    }, 0);
-    setDrawerOpen(false);
-  };
-
-  const handleHomeClick = () => {
-    navigate("/");
-    setActiveLink("Home");
-    setTimeout(() => {
-      if (homeRef?.current) {
-        homeRef.current.scrollIntoView({ behavior: "smooth" });
-      }
-    }, 0);
-    setDrawerOpen(false);
-  };
-
-  const handleLogoClick = () => {
-    handleHomeClick();
-  };
-
-  const toggleDrawer = (open) => (event) => {
-    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-      return;
+    if (sectionRef?.current) {
+      sectionRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else if (linkName === "Home") {
+      navigate("/");
     }
+    setDrawerOpen(false);
+  };
+
+  const handleDrawerToggle = (open) => () => {
     setDrawerOpen(open);
   };
 
+  const drawerList = (
+    <Box
+      sx={{ width: 250 }}
+      role="presentation"
+      onClick={handleDrawerToggle(false)}
+    >
+      <List>
+        <ListItem button onClick={() => handleScrollToSection(homeRef, "Home")}>
+          <ListItemText primary="Home" />
+        </ListItem>
+        <ListItem button onClick={() => handleScrollToSection(servicesRef, "Services")}>
+          <ListItemText primary="Services" />
+        </ListItem>
+        <ListItem button onClick={() => handleScrollToSection(productsRef, "Products")}>
+          <ListItemText primary="Products" />
+        </ListItem>
+        <ListItem button onClick={() => handleScrollToSection(clientsRef, "Clients")}>
+          <ListItemText primary="Clients" />
+        </ListItem>
+        <ListItem button component={RouterLink} to="/vacancy" onClick={() => setActiveLink("Vacancy")}>
+          <ListItemText primary="Vacancy" />
+        </ListItem>
+      </List>
+    </Box>
+  );
+
   return (
-    <>
-      <AppBar
-        style={{
-          backgroundColor: "white",
-          boxShadow: "none",
-          position: "sticky",
-       
-          width: "100%",
-        }}
-      >
-        <NavbarContainer>
-          <LogoBox onClick={handleLogoClick}>
+    <AppBar
+      position="sticky"
+      style={{
+        backgroundColor: "white",
+        boxShadow: "none",
+      }}
+    >
+      <ToolbarStyled>
+        <Box display="flex" alignItems="center">
+          <LogoBox onClick={() => handleScrollToSection(homeRef, "Home")}>
             <img src={logo} alt="Logo" />
           </LogoBox>
-          <NavLinks>
-            <StyledLink
-              onClick={handleHomeClick}
-              className={activeLink === "Home" ? "active" : ""}
+          {!isMobile && (
+            <NavLinks>
+              <StyledLink
+                onClick={() => handleScrollToSection(homeRef, "Home")}
+                className={activeLink === "Home" ? "active" : ""}
+              >
+                Home
+              </StyledLink>
+              <StyledLink
+                onClick={() => handleScrollToSection(servicesRef, "Services")}
+                className={activeLink === "Services" ? "active" : ""}
+              >
+                Services
+              </StyledLink>
+              <StyledLink
+                onClick={() => handleScrollToSection(productsRef, "Products")}
+                className={activeLink === "Products" ? "active" : ""}
+              >
+                Products
+              </StyledLink>
+              <StyledLink
+                onClick={() => handleScrollToSection(clientsRef, "Clients")}
+                className={activeLink === "Clients" ? "active" : ""}
+              >
+                Clients
+              </StyledLink>
+              <StyledNavLink
+                to="/vacancy"
+                onClick={() => setActiveLink("Vacancy")}
+                className={activeLink === "Vacancy" ? "active" : ""}
+              >
+                Vacancy
+              </StyledNavLink>
+            </NavLinks>
+          )}
+        </Box>
+        {isMobile && (
+          <>
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              onClick={handleDrawerToggle(true)}
+              sx={{ color: "#3254a1" }}
             >
-              Home
-            </StyledLink>
-            <StyledLink
-              onClick={() => handleNavClick(servicesRef, "Services")}
-              className={activeLink === "Services" ? "active" : ""}
-            >
-              Services
-            </StyledLink>
-            <StyledLink
-              onClick={() => handleNavClick(productsRef, "Products")}
-              className={activeLink === "Products" ? "active" : ""}
-            >
-              Products
-            </StyledLink>
-            <StyledLink
-              onClick={() => handleNavClick(clientsRef, "Clients")}
-              className={activeLink === "Clients" ? "active" : ""}
-            >
-              Clients
-            </StyledLink>
-            <StyledNavLink
-              to="/vacancy"
-              onClick={() => setActiveLink("Vacancy")}
-              className={activeLink === "Vacancy" ? "active" : ""}
-            >
-              Vacancy
-            </StyledNavLink>
-          </NavLinks>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            onClick={toggleDrawer(true)}
-            className="menu-icon"
-          >
-            <MenuIcon />
-          </IconButton>
-        </NavbarContainer>
-      </AppBar>
-      <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
-        <DrawerList>
-          <List>
-            <ListItem button onClick={handleHomeClick}>
-              <ListItemText primary="Home" className={activeLink === "Home" ? "active" : ""} />
-            </ListItem>
-            <ListItem button onClick={() => handleNavClick(servicesRef, "Services")}>
-              <ListItemText primary="Services" className={activeLink === "Services" ? "active" : ""} />
-            </ListItem>
-            <ListItem button onClick={() => handleNavClick(productsRef, "Products")}>
-              <ListItemText primary="Products" className={activeLink === "Products" ? "active" : ""} />
-            </ListItem>
-            <ListItem button onClick={() => handleNavClick(clientsRef, "Clients")}>
-              <ListItemText primary="Clients" className={activeLink === "Clients" ? "active" : ""} />
-            </ListItem>
-            <ListItem button onClick={() => setActiveLink("Vacancy")}>
-              <ListItemText primary="Vacancy" className={activeLink === "Vacancy" ? "active" : ""} />
-            </ListItem>
-          </List>
-        </DrawerList>
-      </Drawer>
-    </>
+              <MenuIcon />
+            </IconButton>
+            <Drawer anchor="left" open={drawerOpen} onClose={handleDrawerToggle(false)}>
+              {drawerList}
+            </Drawer>
+          </>
+        )}
+      </ToolbarStyled>
+    </AppBar>
   );
 };
 
-const NavbarContainer = styled.div`
+const ToolbarStyled = styled(Toolbar)`
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 0 10px;
-
-  @media (max-width: 600px) {
-    padding: 0 5px;
-  }
+  background-color: white;
 `;
 
 const LogoBox = styled(Box)`
   cursor: pointer;
 
   img {
-    height: 170px;
-    margin-left: 250px;
+    height: 150px;
+    margin-left: 150px;
+  }
 
-    @media (max-width: 600px) {
-      height: 120px;
-      margin-left: auto;
-      margin-right: auto;
+  @media (max-width: 768px) {
+    img {
+      height: 80px;
     }
   }
 `;
@@ -158,24 +160,31 @@ const NavLinks = styled.div`
   align-items: center;
   position: absolute;
   right: 0;
- 
+  top: 20px;
   margin-right: 250px;
-  margin-top: 30px;
+  margin-top: 70px;
+  margin-left: 20px; 
 
-  @media (max-width: 600px) {
+  @media (max-width: 768px) {
     display: none;
   }
 `;
 
-const DrawerList = styled.div`
-  width: 250px;
-  display: flex;
-  flex-direction: column;
+const StyledLink = styled.a`
+  color: #3254a1;
+  text-decoration: none;
+  margin: 0 15px;
+  font-size: 20px;
+  
 
-  .active {
+  &.active {
     color: black;
     text-transform: uppercase;
     font-weight: bold;
+  }
+
+  &:hover {
+    color: black;
   }
 `;
 
@@ -195,24 +204,5 @@ const StyledNavLink = styled(NavLink)`
     color: black;
   }
 `;
-
-const StyledLink = styled.div`
-  color: #3254a1;
-  text-decoration: none;
-  margin: 0 15px;
-  font-size: 20px;
-  cursor: pointer;
-
-  &.active {
-    color: black;
-    text-transform: uppercase;
-    font-weight: bold;
-  }
-
-  &:hover {
-    color: black;
-  }
-`;
-
 
 export default Navbar;

@@ -9,7 +9,7 @@ const GradientBox = styled(Box)({
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
-  justifyContent:'space-between',
+  justifyContent: 'space-between',
   background: 'radial-gradient(circle, #4a90e2 0%, #0033cc 100%)',
   borderRadius: '120px',
   padding: '20px 30px',
@@ -18,7 +18,7 @@ const GradientBox = styled(Box)({
   margin: '0 auto',
   '@media (max-width: 600px)': {
     padding: '10px 15px',
-    textAlign: 'center',
+    flexDirection: 'column',
   },
 });
 
@@ -31,6 +31,7 @@ const InfoBox = styled(Box)({
   margin: '10px',
   '@media (max-width: 600px)': {
     maxWidth: '150px',
+    margin: '5px',
   },
 });
 
@@ -40,6 +41,7 @@ const Divider = styled('div')({
   backgroundColor: '#fff',
   '@media (max-width: 600px)': {
     height: '30px',
+    margin: '10px 0',
   },
 });
 
@@ -66,41 +68,56 @@ const SpacerBox = styled(Box)({
   },
 });
 
+const ResponsiveTypography = styled(Typography)({
+  '@media (max-width: 600px)': {
+    fontSize: '0.75em',
+  },
+});
+
+const ResponsiveIcon = styled('div')({
+  fontSize: '30px',
+  marginBottom: '10px',
+  '@media (max-width: 600px)': {
+    fontSize: '15px',
+    marginBottom: '5px',
+  },
+});
+
 const Footer = () => {
   return (
     <Box>
       <SpacerBox />
       <GradientBox>
         <InfoBox>
-          <LocationOnIcon style={{ fontSize: '30px', marginBottom: '10px' }} />
-          <Typography variant="h6" style={{ fontWeight: 'bold', fontSize: '1.5rem' }}>
+          <ResponsiveIcon as={LocationOnIcon} />
+          <ResponsiveTypography variant="h6" style={{ fontWeight: 'bold', fontSize: '1.5rem' }}>
             Pay Us a Visit
-          </Typography>
-          <Typography variant="body2" style={{ fontSize: '0.875rem' }}>
+          </ResponsiveTypography>
+          <ResponsiveTypography variant="body2" style={{ fontSize: '0.875rem' }}>
             RIZQ House, Gabon St, Addis Ababa,
             around Dembel next to Merkeb building
-          </Typography>
+          </ResponsiveTypography>
         </InfoBox>
         <Divider />
         <InfoBox>
-          <PhoneIcon style={{ fontSize: '30px', marginBottom: '10px' }} />
-          <Typography variant="h6" style={{ fontWeight: 'bold', fontSize: '1.5rem' }}>
+          <ResponsiveIcon as={PhoneIcon} />
+          <ResponsiveTypography variant="h6" style={{ fontWeight: 'bold', fontSize: '1.5rem' }}>
             Give Us a Call
-          </Typography>
-          <Typography variant="body2" style={{ fontSize: '0.875rem' }}>
+          </ResponsiveTypography>
+          <ResponsiveTypography variant="body2" style={{ fontSize: '0.875rem' }}>
             +251-910-183-505 <br />
             +251-913-818-349
-          </Typography>
+          </ResponsiveTypography>
         </InfoBox>
         <Divider />
         <InfoBox>
-          <EmailIcon style={{ fontSize: '30px', marginBottom: '10px' }} />
-          <Typography variant="h6" style={{ fontWeight: 'bold', fontSize: '1.5rem' }}>
+          <ResponsiveIcon as={EmailIcon} />
+          <ResponsiveTypography variant="h6" style={{ fontWeight: 'bold', fontSize: '1.5rem' }}>
             Send Us a Message
-          </Typography>
-          <Typography variant="body2" style={{ fontSize: '0.875rem' }}>
+          </ResponsiveTypography>
+          <ResponsiveTypography variant="body2" style={{ fontSize: '0.875rem' }}>
             info@awuraplc.org
-          </Typography>
+          </ResponsiveTypography>
         </InfoBox>
       </GradientBox>
       <SpacerBox />
@@ -112,15 +129,15 @@ const Footer = () => {
 const Subscribe = () => {
   return (
     <SubscribeBox>
-      <Box>
-        <Typography variant="h4" style={{ fontWeight: 'bold', color: '#000', textAlign: 'left', marginRight:'500px' }}>
+      <Box sx={{ width: '100%', textAlign: 'center' }}>
+        <ResponsiveTypography variant="h4" sx={{ fontWeight: 'bold', color: '#000', marginBottom: '10px' }}>
           Subscribe to our newsletter
-        </Typography>
-        <Typography variant="body2" style={{ color: '#000', textAlign: 'left' }}>
-          Browse local restaurants and businesses for delivery by entering your address below.
-        </Typography>
+        </ResponsiveTypography>
+        <ResponsiveTypography variant="body2" sx={{ color: '#000', marginBottom: '20px' }}>
+          Get your news from us by entering your address below.
+        </ResponsiveTypography>
       </Box>
-      <Box style={{ width: '100%' }}>
+      <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
         <TextField
           variant="outlined"
           placeholder="Enter your email address..."
@@ -144,7 +161,6 @@ const Subscribe = () => {
               </InputAdornment>
             ),
           }}
-          style={{ marginLeft:'1100px' }}
         />
       </Box>
     </SubscribeBox>

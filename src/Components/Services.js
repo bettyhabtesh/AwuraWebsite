@@ -1,5 +1,5 @@
-import React from "react";
-import { Box, Grid, Typography, styled } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Grid, Typography, Button, styled, useMediaQuery } from "@mui/material";
 import {
   FaCode,
   FaCogs,
@@ -10,6 +10,9 @@ import {
 } from "react-icons/fa";
 
 const Services = React.forwardRef((props, ref) => {
+  const [showAll, setShowAll] = useState(false);
+  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("md"));
+
   const servicesData = [
     { title: "Software Product Development", icon: <FaCode /> },
     { title: "ERP Systems", icon: <FaCogs /> },
@@ -22,6 +25,12 @@ const Services = React.forwardRef((props, ref) => {
   const SpacerBox = styled(Box)({
     height: '30px',
   });
+
+  const visibleServices = isSmallScreen && !showAll ? servicesData.slice(0, 3) : servicesData;
+
+  const handleToggle = () => {
+    setShowAll(!showAll);
+  };
 
   return (
     <Box ref={ref} mt={4} textAlign="center">
@@ -47,7 +56,7 @@ const Services = React.forwardRef((props, ref) => {
         testing.
       </Typography>
       <Grid container spacing={4} justifyContent="center">
-        {servicesData.map((service, index) => (
+        {visibleServices.map((service, index) => (
           <Grid item xs={12} sm={6} md={6} lg={6} key={index}>
             <Box
               display="flex"
@@ -63,6 +72,9 @@ const Services = React.forwardRef((props, ref) => {
                 maxWidth: '400px',
                 margin: "0 auto",
                 fontSize: { xs: '14px', sm: '16px' },
+                '&:hover': {
+                  background: "radial-gradient(circle, #0033cc, #4a90e2)",
+                },
               }}
             >
               <Box display="flex" alignItems="center" gap={2}>
@@ -75,13 +87,19 @@ const Services = React.forwardRef((props, ref) => {
           </Grid>
         ))}
       </Grid>
+      {isSmallScreen && (
+        <Button variant="contained" color="primary" onClick={handleToggle} sx={{ mt: 2 }}>
+          {showAll ? "See Less" : "See More"}
+        </Button>
+      )}
       <SpacerBox />
       <Box
         mt={4}
         borderBottom="1px solid #000"
         width={{ xs: "100%", sm: "500px" }}
         height={2}
-        ml={1}
+        ml="auto"
+        mr={{ xs: "0", sm: "920px" }}
       />
       <SpacerBox />
     </Box>

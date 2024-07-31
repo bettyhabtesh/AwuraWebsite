@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, Button, Link, IconButton } from "@mui/material";
+import { Box, Typography, Button, Link, IconButton, useMediaQuery } from "@mui/material";
 import { styled } from "@mui/system";
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import appStore from '../Assets/appStore.png';
 import googlePlay from '../Assets/googlePlay.png';
 import phone from '../Assets/phone.png';
 import labex from '../Assets/labex.png';
 import farm from '../Assets/farm.png';
 import meklit from '../Assets/meklit.png';
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 
 const CustomButton = styled(Button)({
   background: 'radial-gradient(circle, rgba(0,123,255,1) 0%, rgba(0,123,255,0.9) 50%, rgba(0,123,255,0.7) 100%)',
@@ -40,6 +40,7 @@ const LinkButton = styled('a')({
 
 const Products = React.forwardRef((props, ref) => {
   const [activeSection, setActiveSection] = useState(0);
+  const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down('sm'));
 
   const sections = [
     {
@@ -48,7 +49,7 @@ const Products = React.forwardRef((props, ref) => {
       image: phone,
       appStoreLink: "https://www.apple.com/app-store/",
       googlePlayLink: "https://play.google.com/store",
-      websiteLink: "https://www.owlevents.com",
+      websiteLink: "https://owlevents.app/",
     },
     {
       title: "Discover LabExAfrica",
@@ -56,7 +57,7 @@ const Products = React.forwardRef((props, ref) => {
       image: labex,
       appStoreLink: "https://www.apple.com/app-store/",
       googlePlayLink: "https://play.google.com/store",
-      websiteLink: "https://www.labexafrica.com",
+      websiteLink: "https://portal.labexafrica.com/",
     },
     {
       title: "Discover Farm",
@@ -64,7 +65,7 @@ const Products = React.forwardRef((props, ref) => {
       image: farm,
       appStoreLink: "https://www.apple.com/app-store/",
       googlePlayLink: "https://play.google.com/store",
-      websiteLink: "https://www.farmplatform.com",
+      websiteLink: "https://maed.farm/auth/login",
     },
     {
       title: "Discover Meklit",
@@ -72,14 +73,14 @@ const Products = React.forwardRef((props, ref) => {
       image: meklit,
       appStoreLink: "https://www.apple.com/app-store/",
       googlePlayLink: "https://play.google.com/store",
-      websiteLink: "https://www.meklitplatform.com",
+      websiteLink: "https://meklit.life/",
     }
   ];
 
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveSection((prev) => (prev + 1) % sections.length);
-    }, 5000); 
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [sections.length]);
@@ -89,9 +90,6 @@ const Products = React.forwardRef((props, ref) => {
   };
 
   const currentSection = sections[activeSection];
-  const SpacerBox = styled(Box)({
-    height: '30px',
-  });
 
   return (
     <Box ref={ref} mt={4} textAlign="center" sx={{ height: 'auto', px: { xs: 2, sm: 4 }, py: 4 }}>
@@ -102,13 +100,15 @@ const Products = React.forwardRef((props, ref) => {
       >
         Products
       </Typography>
-      <Typography
-        variant="body1"
-        mb={4}
-        sx={{ mx: "auto", maxWidth: "800px", fontSize: { xs: '14px', sm: '16px' } }}
-      >
-        We offer a diverse range of high-quality products to meet the varied needs of our customers. Our product portfolio includes cutting-edge technology solutions as well as innovative consumer goods for the home and outdoors. Whether you're looking for enterprise software, smart home devices, or stylish outdoor gear, you'll find it all under one roof with Awura.
-      </Typography>
+      {!isSmallScreen && (
+        <Typography
+          variant="body1"
+          mb={4}
+          sx={{ mx: "auto", maxWidth: "800px", fontSize: { xs: '14px', sm: '16px' } }}
+        >
+          We offer a diverse range of high-quality products to meet the varied needs of our customers. Our product portfolio includes cutting-edge technology solutions as well as innovative consumer goods for the home and outdoors. Whether you're looking for enterprise software, smart home devices, or stylish outdoor gear, you'll find it all under one roof with Awura.
+        </Typography>
+      )}
       <Box
         display="flex"
         flexDirection={{ xs: 'column', sm: 'row' }}
@@ -117,7 +117,7 @@ const Products = React.forwardRef((props, ref) => {
         mt={4}
       >
         <Box
-          textAlign="left"
+          textAlign={isSmallScreen ? "center" : "left"}
           maxWidth={{ xs: '100%', sm: '400px' }}
           mb={{ xs: 4, sm: 0 }}
           mr={{ sm: 4 }}
@@ -136,22 +136,8 @@ const Products = React.forwardRef((props, ref) => {
           >
             {currentSection.description}
           </Typography>
-          <Box display="flex" flexDirection={{ xs: 'column', sm: 'row' }} mb={4}>
-            <LinkButton href={currentSection.appStoreLink} target="_blank" rel="noopener noreferrer">
-              <img src={appStore} alt="Download on the App Store" />
-              <Typography sx={{ color: '#000', fontSize: { xs: '10px', sm: '12px' } }}>
-                Download on the App Store
-              </Typography>
-            </LinkButton>
-            <LinkButton href={currentSection.googlePlayLink} target="_blank" rel="noopener noreferrer">
-              <img src={googlePlay} alt="Get it on Google Play" />
-              <Typography sx={{ color: '#000', fontSize: { xs: '10px', sm: '12px' } }}>
-                Get it on Google Play
-              </Typography>
-            </LinkButton>
-          </Box>
           <Link href={currentSection.websiteLink} target="_blank" rel="noopener noreferrer">
-            <CustomButton variant="contained">
+            <CustomButton variant="contained" sx={{ display: 'block', mx: 'auto' }}>
               Go to website
             </CustomButton>
           </Link>
@@ -168,8 +154,40 @@ const Products = React.forwardRef((props, ref) => {
             alt="Display"
             style={{ height: "100%", width: "auto" }}
           />
+          {isSmallScreen && (
+            <Box display="flex" justifyContent="center" mt={2}>
+              <LinkButton href={currentSection.appStoreLink} target="_blank" rel="noopener noreferrer">
+                <img src={appStore} alt="Download on the App Store" />
+                <Typography sx={{ color: '#000', fontSize: { xs: '10px', sm: '12px' } }}>
+                  Download on the App Store
+                </Typography>
+              </LinkButton>
+              <LinkButton href={currentSection.googlePlayLink} target="_blank" rel="noopener noreferrer">
+                <img src={googlePlay} alt="Get it on Google Play" />
+                <Typography sx={{ color: '#000', fontSize: { xs: '10px', sm: '12px' } }}>
+                  Get it on Google Play
+                </Typography>
+              </LinkButton>
+            </Box>
+          )}
         </Box>
       </Box>
+      {!isSmallScreen && (
+        <Box display="flex" justifyContent="center" mt={4}>
+          <LinkButton href={currentSection.appStoreLink} target="_blank" rel="noopener noreferrer">
+            <img src={appStore} alt="Download on the App Store" />
+            <Typography sx={{ color: '#000', fontSize: { xs: '10px', sm: '12px' } }}>
+              Download on the App Store
+            </Typography>
+          </LinkButton>
+          <LinkButton href={currentSection.googlePlayLink} target="_blank" rel="noopener noreferrer">
+            <img src={googlePlay} alt="Get it on Google Play" />
+            <Typography sx={{ color: '#000', fontSize: { xs: '10px', sm: '12px' } }}>
+              Get it on Google Play
+            </Typography>
+          </LinkButton>
+        </Box>
+      )}
       <Box display="flex" justifyContent="center" mt={4}>
         {sections.map((_, index) => (
           <IconButton
@@ -181,13 +199,14 @@ const Products = React.forwardRef((props, ref) => {
           </IconButton>
         ))}
       </Box>
-      <SpacerBox />
+      <Box height="30px" />
       <Box
         mt={4}
         borderBottom="1px solid #000"
         width={{ xs: "100%", sm: "500px" }}
         height={2}
         mx="auto"
+        mr={{ xs: "0", sm: "920px" }}
       />
     </Box>
   );
