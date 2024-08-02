@@ -154,40 +154,25 @@ const Products = React.forwardRef((props, ref) => {
             alt="Display"
             style={{ height: "100%", width: "auto" }}
           />
-          {isSmallScreen && (
-            <Box display="flex" justifyContent="center" mt={2}>
-              <LinkButton href={currentSection.appStoreLink} target="_blank" rel="noopener noreferrer">
-                <img src={appStore} alt="Download on the App Store" />
-                <Typography sx={{ color: '#000', fontSize: { xs: '10px', sm: '12px' } }}>
-                  Download on the App Store
-                </Typography>
-              </LinkButton>
-              <LinkButton href={currentSection.googlePlayLink} target="_blank" rel="noopener noreferrer">
-                <img src={googlePlay} alt="Get it on Google Play" />
-                <Typography sx={{ color: '#000', fontSize: { xs: '10px', sm: '12px' } }}>
-                  Get it on Google Play
-                </Typography>
-              </LinkButton>
-            </Box>
-          )}
+    
         </Box>
       </Box>
-      {!isSmallScreen && currentSection.title === "Discover OwlEvents" && (
-        <Box display="flex" justifyContent="center" mt={4}>
-          <LinkButton href={currentSection.appStoreLink} target="_blank" rel="noopener noreferrer">
-            <img src={appStore} alt="Download on the App Store" />
-            <Typography sx={{ color: '#000', fontSize: { xs: '10px', sm: '12px' } }}>
-              Download on the App Store
-            </Typography>
-          </LinkButton>
-          <LinkButton href={currentSection.googlePlayLink} target="_blank" rel="noopener noreferrer">
-            <img src={googlePlay} alt="Get it on Google Play" />
-            <Typography sx={{ color: '#000', fontSize: { xs: '10px', sm: '12px' } }}>
-              Get it on Google Play
-            </Typography>
-          </LinkButton>
-        </Box>
-      )}
+      {currentSection.title === "Discover OwlEvents" && (
+  <Box display="flex" justifyContent="center" mt={4}>
+    <LinkButton href={currentSection.googlePlayLink} target="_blank" rel="noopener noreferrer">
+      <img src={googlePlay} alt="Get it on Google Play" />
+      <Typography sx={{ color: '#000', fontSize: { xs: '10px', sm: '12px' } }}>
+        Get it on Google Play
+      </Typography>
+    </LinkButton>
+    <LinkButton href={currentSection.appStoreLink} target="_blank" rel="noopener noreferrer">
+      <img src={appStore} alt="Download on the App Store" />
+      <Typography sx={{ color: '#000', fontSize: { xs: '10px', sm: '12px' } }}>
+        Download on the App Store
+      </Typography>
+    </LinkButton>
+  </Box>
+)}
       <Box display="flex" justifyContent="center" mt={4}>
         {sections.map((_, index) => (
           <IconButton
