@@ -96,10 +96,10 @@ const Services = React.forwardRef((props, ref) => {
       <Box
         mt={4}
         borderBottom="1px solid #000"
-        width={{ xs: "100%", sm: "500px" }}
+        width={{ xs: "90%", sm: "500px" }}
         height={2}
-        ml="auto"
-        mr={{ xs: "0", sm: "920px" }}
+        ml='auto'
+        mr={{ xs: "18px", sm: "920px" }}
       />
       <SpacerBox />
     </Box>

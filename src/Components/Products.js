@@ -90,13 +90,13 @@ const Products = React.forwardRef((props, ref) => {
   };
 
   const currentSection = sections[activeSection];
-
+ 
   return (
     <Box ref={ref} mt={4} textAlign="center" sx={{ height: 'auto', px: { xs: 2, sm: 4 }, py: 4 }}>
       <Typography
         variant="h4"
         gutterBottom
-        sx={{ fontSize: { xs: '24px', sm: '30px', md: '40px' } }}
+        sx={{ fontSize: { xs: '30px', sm: '35px', md: '40px' } }}
       >
         Products
       </Typography>
@@ -172,7 +172,7 @@ const Products = React.forwardRef((props, ref) => {
           )}
         </Box>
       </Box>
-      {!isSmallScreen && (
+      {!isSmallScreen && currentSection.title === "Discover OwlEvents" && (
         <Box display="flex" justifyContent="center" mt={4}>
           <LinkButton href={currentSection.appStoreLink} target="_blank" rel="noopener noreferrer">
             <img src={appStore} alt="Download on the App Store" />

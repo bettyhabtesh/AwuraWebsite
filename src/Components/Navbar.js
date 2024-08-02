@@ -164,7 +164,17 @@ const NavLinks = styled.div`
   margin-right: 250px;
   margin-top: 70px;
   margin-left: 20px; 
+ 
 
+  a {
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
   @media (max-width: 768px) {
     display: none;
   }

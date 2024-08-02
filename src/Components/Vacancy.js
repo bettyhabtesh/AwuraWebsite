@@ -1,317 +1,511 @@
 /** @format */
 
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { Button, TextField } from "@mui/material";
-import superhero from "../Assets/superhero.png";
+import React, { useEffect, useState, useRef } from "react";
+import {
+  Box,
+  Container,
+  Typography,
+  Button,
+  Grid,
+  Paper,
+  List,
+  ListItem,
+  ListItemText,
+  Link,
+  Divider,
+} from "@mui/material";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import WorkIcon from "@mui/icons-material/Work";
+import SecurityIcon from "@mui/icons-material/Security";
+import SchoolIcon from "@mui/icons-material/School";
+import UpdateIcon from "@mui/icons-material/Update";
+import vacancy from "../Assets/vacancy.png";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
+import styled from "styled-components";
 
-const Vacancy = () => {
-  const [vacancies, setVacancies] = useState([]);
-  const [formValues, setFormValues] = useState({
-    name: "",
-    mobile: "",
-    email: "",
-    portofolio: null,
-    cv: null,
+const loadGapiScript = () => {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = "https://apis.google.com/js/api.js";
+    script.onload = () => {
+      resolve();
+    };
+    script.onerror = (error) => {
+      reject(error);
+    };
+    document.body.appendChild(script);
   });
-  const [errors, setErrors] = useState({});
-
-  useEffect(() => {
-    fetch("/api/vacancies")
-      .then((response) => response.json())
-      .then((data) => setVacancies(data))
-      .catch((error) => console.error("Error fetching vacancies:", error));
-  }, []);
-
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    setFormValues({
-      ...formValues,
-      [name]: files ? files[0] : value,
-    });
-  };
-
-  const validate = () => {
-    let tempErrors = {};
-    if (!formValues.name) tempErrors.name = "Name is required";
-    if (!formValues.mobile) tempErrors.mobile = "Mobile number is required";
-    if (!formValues.email) tempErrors.email = "Email is required";
-    if (!formValues.portofolio) tempErrors.portofolio = "Portofolio is required";
-    if (!formValues.cv) tempErrors.cv = "CV is required";
-    setErrors(tempErrors);
-    return Object.keys(tempErrors).length === 0;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validate()) {
-      console.log("Form submitted successfully", formValues);
-    }
-  };
-
-  return (
-    <>
-      <Navbar />
-      <VacancyContainer>
-        <Sidebar>
-          <SidebarTitle>Vacancy List</SidebarTitle>
-          {vacancies.map((vacancy, index) => (
-            <VacancyItem key={index}>
-              {vacancy.title}
-              {vacancy.subpositions && (
-                <Subpositions>
-                  {vacancy.subpositions.map((subposition, subIndex) => (
-                    <SubpositionItem key={subIndex}>
-                      {subposition}
-                    </SubpositionItem>
-                  ))}
-                </Subpositions>
-              )}
-            </VacancyItem>
-          ))}
-        </Sidebar>
-        <Content>
-          <HeaderContainer>
-            <Image src={superhero} alt="Superhero" />
-            <TextContainer>
-              <Title>
-                WE ARE <strong>HIRING</strong>
-              </Title>
-              <Description>
-                We're a growing tech company seeking talented professionals to
-                join our dynamic team.
-              </Description>
-            </TextContainer>
-          </HeaderContainer>
-          <FormContainer>
-            <FormTitle>Apply Here</FormTitle>
-            <Form onSubmit={handleSubmit}>
-              <StyledTextField
-                label="Name"
-                name="name"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                value={formValues.name}
-                onChange={handleChange}
-                error={!!errors.name}
-                helperText={errors.name}
-              />
-              <StyledTextField
-                label="Mobile"
-                name="mobile"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                value={formValues.mobile}
-                onChange={handleChange}
-                error={!!errors.mobile}
-                helperText={errors.mobile}
-              />
-              <StyledTextField
-                label="Email"
-                name="email"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                value={formValues.email}
-                onChange={handleChange}
-                error={!!errors.email}
-                helperText={errors.email}
-              />
-              <StyledTextField
-                label="Portofolio"
-                name="portofolio"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                value={formValues.portofolio}
-                onChange={handleChange}
-                error={!!errors.portofolio}
-                helperText={errors.portofolio}
-              />
-              <StyledTextField
-                label="CV"
-                name="cv"
-                type="file"
-                InputLabelProps={{ shrink: true }}
-                fullWidth
-                margin="normal"
-                onChange={handleChange}
-                error={!!errors.cv}
-                helperText={errors.cv}
-              />
-              <ApplyButton type="submit" variant="contained">
-                Apply
-              </ApplyButton>
-            </Form>
-          </FormContainer>
-        </Content>
-      </VacancyContainer>
-      
-    </>
-  );
 };
 
-const VacancyContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: white;
-  margin-top: 50px;
+const Vacancy = () => {
+  const [positions, setPositions] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const careerOpeningsRef = useRef(null);
 
-  @media (min-width: 768px) {
-    flex-direction: row;
-    align-items: flex-start;
-    margin-left: 50px;
-  }
-`;
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await loadGapiScript();
+        console.log("Google API script loaded");
+        window.gapi.load("client", initClient);
+      } catch (error) {
+        console.error("Error loading Google API script", error);
+      }
+    };
 
-const Sidebar = styled.div`
-  width: 60%;
-  height: 150px;
-  padding: 20px;
-  background-color: #f8f8f8;
-  border-bottom: 1px solid #ddd;
+    const initClient = () => {
+      window.gapi.client
+        .init({
+          apiKey: "AIzaSyDTcKL2Oat586mmCK6xHabJEO-VAu6m8m8",
+          discoveryDocs: [
+            "https://sheets.googleapis.com/$discovery/rest?version=v4",
+          ],
+        })
+        .then(() => {
+          console.log("Google Sheets API client initialized");
+          return window.gapi.client.sheets.spreadsheets.values.get({
+            spreadsheetId: "1lbmVA7_KZLo_tW81r1CX0h8tagT07urpIhkKdWoFfbA",
+            range: "Sheet1!A1:E",
+          });
+        })
+        .then((response) => {
+          console.log("Data fetched from Google Sheets:", response);
+          const data = response.result.values;
+          const formattedData = data.slice(1).map((row) => ({
+            title: row[0],
+            experience: row[1],
+            deadline: row[2],
+            category: row[3],
+            link: row[4],
+          }));
+          setPositions(formattedData);
+        })
+        .catch((error) => {
+          console.error("Error fetching data from Google Sheets", error);
+        });
+    };
 
-  @media (min-width: 768px) {
-    width: 250px;
-    height: 200px;
-    border-bottom: none;
-    border-right: 1px solid #ddd;
-  }
-`;
+    fetchData();
+  }, []);
 
-const SidebarTitle = styled.h2`
-  font-size: 1rem;
-  margin-bottom: 20px;
-`;
+  const handleCategoryClick = (category) => {
+    setSelectedCategory(category);
+  };
 
-const VacancyItem = styled.div`
-  margin-bottom: 15px;
-  font-size: 1.2rem;
-  cursor: pointer;
-`;
-
-const Subpositions = styled.div`
-  margin-left: 15px;
-  font-size: 1rem;
-`;
-
-const SubpositionItem = styled.div`
-  margin-top: 5px;
-`;
-
-const Content = styled.div`
-  flex: 1;
-  padding: 30px 30px;
-
-  @media (min-width: 768px) {
-    padding: 30px 50px;
-  }
-`;
-
-const HeaderContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 1px;
-  margin-top: 5px;
-
-  @media (min-width: 768px) {
-    flex-direction: row;
-    align-items: flex-start;
-    margin-top: -80px;
-  }
-`;
-
-const Image = styled.img`
-  width: 100%;
-  height: auto;
-  max-width: 300px;
-  margin-top: 20px;
-
-  @media (min-width: 768px) {
-    width: 300px;
-    margin-top: 0;
-  }
-`;
-
-const TextContainer = styled.div`
-  margin-top: 20px;
-  text-align: center;
-
-  @media (min-width: 768px) {
-    margin-top: 0;
-    margin-left: 20px;
-    text-align: left;
-  }
-`;
-
-const Title = styled.h1`
-  font-size: 2rem;
-  margin-bottom: 20px;
-
-  @media (min-width: 768px) {
-    font-size: 2.5rem;
-  }
-`;
-
-const Description = styled.p`
-  font-size: 1rem;
-  margin-bottom: 20px;
-
-  @media (min-width: 768px) {
-    font-size: 1.2rem;
-  }
-`;
-
-const FormContainer = styled.div`
-  max-width: 100%;
-  margin: 0 auto;
-
-  @media (min-width: 768px) {
-    max-width: 600px;
-  }
-`;
-
-const FormTitle = styled.h2`
-  font-size: 1.5rem;
-  margin-bottom: 20px;
-
-  @media (min-width: 768px) {
-    font-size: 2rem;
-  }
-`;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-`;
-
-const StyledTextField = styled(TextField)`
-  .MuiInputBase-root {
-    border-radius: 25px;
-  }
-`;
-
-const ApplyButton = styled(Button)`
-  && {
-    width: 100%;
-    border-radius: 25px;
-    padding: 10px;
-    font-size: 1rem;
-    background: radial-gradient(circle, #4a90e2 50%, #0033cc 100%);
-    color: white;
-
-    @media (min-width: 768px) {
-      width: 250px;
-      font-size: 1.2rem;
-      margin-left: 160px;
+  const handleJoinTeamClick = () => {
+    if (careerOpeningsRef.current) {
+      careerOpeningsRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  }
-`;
+  };
+
+  const filteredPositions = selectedCategory
+    ? positions.filter((position) => position.category === selectedCategory)
+    : positions;
+
+  const SpacerBox = styled(Box)({
+    height: "30px",
+  });
+
+  return (
+    <Box>
+      <Navbar />
+      <Box
+        sx={{
+          position: "relative",
+          height: { xs: "300px", md: "400px" },
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "column",
+          textAlign: "center",
+          p: 3,
+          color: "white",
+        }}
+      >
+        <img
+          src={vacancy}
+          alt="vacancy"
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            position: "absolute",
+            zIndex: -1,
+          }}
+        />
+        <Box
+          sx={{
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0, 24, 51, 0.7)",
+            zIndex: -1,
+          }}
+        />
+        <Typography
+          variant="h3"
+          component="h1"
+          gutterBottom
+          sx={{ fontSize: { xs: "24px", md: "36px" } }}
+        >
+          JOIN US
+        </Typography>
+        <Box sx={{ width: { xs: "80%", md: "50%" }, textAlign: "center" }}>
+          <Typography
+            variant="h6"
+            component="p"
+            gutterBottom
+            sx={{ fontSize: { xs: "14px", md: "16px" } }}
+          >
+            Are you passionate about making a difference? At our company, we are
+            always looking for enthusiastic and talented individuals to join our
+            dynamic team. We offer a collaborative and innovative environment
+            where your ideas and contributions matter.
+          </Typography>
+        </Box>
+        <Box mt={2} textAlign="center">
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{ mr: 2, backgroundColor: "#0FB4E8" }}
+            onClick={handleJoinTeamClick}
+          >
+            Join the team
+          </Button>
+        </Box>
+      </Box>
+
+      {/* Benefits Section */}
+      <Container sx={{ py: 5 }}>
+        <Grid container spacing={4}>
+          <Grid item xs={12} md={4}>
+            <Typography
+              variant="h4"
+              component="h2"
+              color="#001833"
+              sx={{
+                fontWeight: "bold",
+                textAlign: { xs: "center", md: "left" },
+                fontSize: { xs: "24px", md: "36px" },
+              }}
+              gutterBottom
+            >
+              Why you Should Join Our Awesome Team
+            </Typography>
+            <Typography
+              variant="body1"
+              component="p"
+              gutterBottom
+              sx={{ textAlign: { xs: "center", md: "left" } }}
+            >
+              We want you to feel like home when you are working at AWURA & for
+              that we have curated a great set of benefits for you. It all
+              starts with a training!
+            </Typography>
+          </Grid>
+          <Grid item xs={12} md={8}>
+            <Grid container spacing={4}>
+              <Grid item xs={12} sm={6}>
+                <Paper elevation={3} sx={{ p: 3, height: "100%" }}>
+                  <Box display="flex" alignItems="center" mb={2}>
+                    <WorkIcon fontSize="large" color="primary" sx={{ mr: 1 }} />
+                    <Typography
+                      variant="h6"
+                      component="h3"
+                      color="#001833"
+                      sx={{ fontWeight: "bold" }}
+                    >
+                      Team work
+                    </Typography>
+                  </Box>
+                  <Typography variant="body2" component="p">
+                    At our company, teamwork is at the heart of everything we
+                    do. We believe in the power of collaboration and
+                    communication, working together to achieve our goals and
+                    drive innovation.
+                  </Typography>
+                </Paper>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Paper elevation={3} sx={{ p: 3, height: "100%" }}>
+                  <Box display="flex" alignItems="center" mb={2}>
+                    <SecurityIcon
+                      fontSize="large"
+                      color="primary"
+                      sx={{ mr: 1 }}
+                    />
+                    <Typography
+                      variant="h6"
+                      component="h3"
+                      color="#001833"
+                      sx={{ fontWeight: "bold" }}
+                    >
+                      Secured Future
+                    </Typography>
+                  </Box>
+                  <Typography variant="body2" component="p">
+                    We are committed to ensuring a secure and stable future for
+                    all our employees. Our comprehensive benefits package
+                    includes competitive salaries, health and wellness programs,
+                    and retirement plans.
+                  </Typography>
+                </Paper>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Paper elevation={3} sx={{ p: 3, height: "100%" }}>
+                  <Box display="flex" alignItems="center" mb={2}>
+                    <SchoolIcon
+                      fontSize="large"
+                      color="primary"
+                      sx={{ mr: 1 }}
+                    />
+                    <Typography
+                      variant="h6"
+                      component="h3"
+                      color="#001833"
+                      sx={{ fontWeight: "bold" }}
+                    >
+                      Learning Opportunity
+                    </Typography>
+                  </Box>
+                  <Typography variant="body2" component="p">
+                    Continuous learning and professional development are key to
+                    staying ahead in today’s fast-paced world. We offer various
+                    training programs, workshops, and mentorship opportunities
+                    to help you grow your skills and advance your career.
+                  </Typography>
+                </Paper>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Paper elevation={3} sx={{ p: 3, height: "100%" }}>
+                  <Box display="flex" alignItems="center" mb={2}>
+                    <UpdateIcon
+                      fontSize="large"
+                      color="primary"
+                      sx={{ mr: 1 }}
+                    />
+                    <Typography
+                      variant="h6"
+                      component="h3"
+                      color="#001833"
+                      sx={{ fontWeight: "bold" }}
+                    >
+                      Upgrade Skills
+                    </Typography>
+                  </Box>
+                  <Typography variant="body2" component="p">
+                    In a rapidly evolving industry, staying updated with the
+                    latest skills is crucial. We provide resources and support
+                    for upgrading your skills through certifications, online
+                    courses, and hands-on projects. Be part of a team that
+                    encourages and supports your learning journey.
+                  </Typography>
+                </Paper>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Container>
+
+      {/* Career Openings Section */}
+      <Container sx={{ py: 5 }}>
+        <Box
+          mt={4}
+          borderBottom="1px solid #000"
+          width={{ xs: "90%", sm: "500px" }}
+          height={2}
+          mx="auto"
+          sx={{ display: { xs: "none", sm: "block" } }}
+        />
+        <SpacerBox />
+        <SpacerBox />
+        <Box
+          width={{ xs: "90%", md: "70%" }}
+          mx="auto"
+          textAlign="center"
+          ref={careerOpeningsRef} // Set ref here
+        >
+          <Typography
+            variant="h4"
+            component="h2"
+            color="#3254A1"
+            sx={{ fontWeight: "bold" }}
+            gutterBottom
+          >
+            Career Openings
+          </Typography>
+          <Typography variant="body1" component="p" gutterBottom>
+            We're always looking for creative, talented self-starters to join
+            the AWURA family. Check out our open roles below and fill out an
+            application.
+          </Typography>
+        </Box>
+        <SpacerBox />
+        <SpacerBox />
+        <Grid
+          container
+          spacing={4}
+          sx={{ flexDirection: { xs: "column", md: "row" } }}
+        >
+          <Grid
+            item
+            xs={12}
+            md={3}
+            sx={{ textAlign: { xs: "center", md: "left" } }}
+          >
+            <Typography
+              variant="h6"
+              component="h3"
+              color="#3254A1"
+              ml={{ xs: 0, md: 8 }}
+              sx={{
+                fontWeight: "bold",
+                textDecoration: "underline",
+                textAlign: { xs: "center", md: "left" },
+              }}
+              gutterBottom
+            >
+              CATEGORIES
+            </Typography>
+
+            <List
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: { xs: "center", md: "flex-start" },
+              }}
+            >
+              {[
+                "HT & ADMIN",
+                "ENGINEERING",
+                "SUPPORT",
+                "DESIGN",
+                "DIGITAL MARKETING",
+              ].map((category, index) => (
+                <ListItem
+                  button
+                  key={index}
+                  onClick={() => handleCategoryClick(category)}
+                  sx={{
+                    color: selectedCategory === category ? "#3254A1" : "#000",
+                    textAlign: "center",
+                  }}
+                >
+                  <ListItemText primary={category} />
+                </ListItem>
+              ))}
+            </List>
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            md={1}
+            sx={{ display: { xs: "none", md: "block" } }}
+          >
+            <Divider
+              orientation="vertical"
+              sx={{
+                height: "300px",
+                borderColor: "#3254A1",
+                borderRight: "4px solid #3254A1",
+              }}
+            />
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            md={8}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            {filteredPositions.length > 0 ? (
+              filteredPositions.map((position, index) => (
+                <React.Fragment key={index}>
+                  <Paper
+                    elevation={3}
+                    sx={{
+                      p: 2,
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      mb: 2,
+                      width: "100%",
+                    }}
+                  >
+                    <Box sx={{ flex: 1, textAlign: "center" }}>
+                      <Typography
+                        variant="h6"
+                        component="h4"
+                        color="#001833"
+                        sx={{ fontWeight: "bold" }}
+                      >
+                        {position.title}
+                      </Typography>
+                    </Box>
+                    <Box sx={{ flex: 1, textAlign: "center" }}>
+                      <Typography variant="body2" component="p">
+                        Experience
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        component="p"
+                        color="#001833"
+                        sx={{
+                          fontWeight: "bold",
+                          fontSize: { xs: "14px", md: "18px" },
+                        }} // Adjust font size
+                      >
+                        {position.experience} Years
+                      </Typography>
+                    </Box>
+                    <Box sx={{ flex: 1, textAlign: "center" }}>
+                      <Typography variant="body2" component="p">
+                        Deadline
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        component="p"
+                        color="#001833"
+                        sx={{
+                          fontWeight: "bold",
+                          fontSize: { xs: "14px", md: "18px" },
+                        }} // Adjust font size
+                      >
+                        {position.deadline}
+                      </Typography>
+                    </Box>
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                      <Link
+                        href={position.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        underline="none"
+                      >
+                        <ArrowForwardIosIcon />
+                      </Link>
+                    </Box>
+                  </Paper>
+                  {index < filteredPositions.length - 1 && (
+                    <Divider sx={{ my: 2 }} />
+                  )}
+                </React.Fragment>
+              ))
+            ) : (
+              <Typography variant="body1" color="textSecondary">
+                No positions within this category
+              </Typography>
+            )}
+          </Grid>
+        </Grid>
+      </Container>
+      <Footer />
+    </Box>
+  );
+};
 
 export default Vacancy;

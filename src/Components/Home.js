@@ -33,7 +33,7 @@ const Home = () => {
             <StyledBox
               mt={4}
               borderBottom="1px solid #000"
-              width="500px"
+              width={{ xs: "100%", sm: "500px" }}
               height={2}
               mr="100px"
             />
@@ -46,7 +46,12 @@ const Home = () => {
         <Products ref={productsRef} />
         <Clients ref={clientsRef} />
       </MainContainer>
-      <Footer />
+      <Footer
+        homeRef={homeRef}
+        servicesRef={servicesRef}
+        productsRef={productsRef}
+        clientsRef={clientsRef}
+      />
     </>
   );
 };
@@ -59,7 +64,7 @@ const comeUp = keyframes`
   }
   100% {
     transform: translateY(0);
-    opacity: 6;
+    opacity: 1;
   }
 `;
 
