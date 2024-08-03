@@ -33,7 +33,7 @@ const Home = () => {
             <StyledBox
               mt={4}
               borderBottom="1px solid #000"
-              width={{ xs: "100%", sm: "500px" }}
+              width={{ xs: "100%", sm: "500px", md: "500px" }}
               height={2}
               mr="100px"
             />
@@ -79,6 +79,10 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
   }
+  @media (min-width: 769px) and (max-width: 1024px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const TextContainer = styled.div`
@@ -92,6 +96,12 @@ const TextContainer = styled.div`
     margin-right: 20px;
     text-align: center;
   }
+  @media (min-width: 769px) and (max-width: 1024px) {
+    max-width: 80%;
+    margin-left: 20px;
+    margin-right: 20px;
+    text-align: center;
+  }
 `;
 
 const Title = styled.h1`
@@ -99,6 +109,9 @@ const Title = styled.h1`
   font-weight: bold;
   @media (max-width: 768px) {
     font-size: 2.5rem;
+  }
+  @media (min-width: 769px) and (max-width: 1024px) {
+    font-size: 3rem;
   }
 `;
 
@@ -108,6 +121,9 @@ const Description = styled.p`
   @media (max-width: 768px) {
     font-size: 16px;
   }
+  @media (min-width: 769px) and (max-width: 1024px) {
+    font-size: 18px;
+  }
 `;
 
 const SpacerBox = styled(Box)`
@@ -115,10 +131,16 @@ const SpacerBox = styled(Box)`
   @media (max-width: 768px) {
     display: none;
   }
+  @media (min-width: 769px) and (max-width: 1024px) {
+    display: none;
+  }
 `;
 
 const StyledBox = styled(Box)`
   @media (max-width: 768px) {
+    display: none;
+  }
+  @media (min-width: 769px) and (max-width: 1024px) {
     display: none;
   }
 `;
@@ -129,6 +151,10 @@ const ImageContainer = styled.div`
     max-width: 90%;
     margin-top: 20px;
   }
+  @media (min-width: 769px) and (max-width: 1024px) {
+    max-width: 80%;
+    margin-top: 20px;
+  }
 `;
 
 const StyledImage = styled.img`
@@ -137,6 +163,10 @@ const StyledImage = styled.img`
   animation: ${comeUp} 1s ease-out;
   @media (max-width: 768px) {
     width: 100%;
+    height: auto;
+  }
+  @media (min-width: 769px) and (max-width: 1024px) {
+    width: 80%;
     height: auto;
   }
 `;

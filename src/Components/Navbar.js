@@ -20,6 +20,7 @@ import { NavLink } from 'react-router-dom';
 const Navbar = ({ homeRef, servicesRef, productsRef, clientsRef }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [activeLink, setActiveLink] = useState("");
   const navigate = useNavigate();
@@ -77,7 +78,7 @@ const Navbar = ({ homeRef, servicesRef, productsRef, clientsRef }) => {
           <LogoBox onClick={() => handleScrollToSection(homeRef, "Home")}>
             <img src={logo} alt="Logo" />
           </LogoBox>
-          {!isMobile && (
+          {!isMobile && !isTablet && (
             <NavLinks>
               <StyledLink
                 onClick={() => handleScrollToSection(homeRef, "Home")}
@@ -113,7 +114,7 @@ const Navbar = ({ homeRef, servicesRef, productsRef, clientsRef }) => {
             </NavLinks>
           )}
         </Box>
-        {isMobile && (
+        {(isMobile || isTablet) && (
           <>
             <IconButton
               edge="start"
@@ -163,8 +164,7 @@ const NavLinks = styled.div`
   top: 20px;
   margin-right: 250px;
   margin-top: 70px;
-  margin-left: 20px; 
- 
+  margin-left: 20px;
 
   a {
     text-decoration: none;
@@ -175,6 +175,7 @@ const NavLinks = styled.div`
       cursor: pointer;
     }
   }
+
   @media (max-width: 768px) {
     display: none;
   }
@@ -185,7 +186,6 @@ const StyledLink = styled.a`
   text-decoration: none;
   margin: 0 15px;
   font-size: 20px;
-  
 
   &.active {
     color: black;

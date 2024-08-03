@@ -11,7 +11,6 @@ import {
   List,
   ListItem,
   ListItemText,
-  Link,
   Divider,
 } from "@mui/material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -40,8 +39,18 @@ const loadGapiScript = () => {
 
 const Vacancy = () => {
   const [positions, setPositions] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedPosition, setSelectedPosition] = useState(null);
+  const [filteredPositions, setFilteredPositions] = useState(positions);
   const careerOpeningsRef = useRef(null);
+  const categories = [
+    "All",
+    "HT & ADMIN",
+    "ENGINEERING",
+    "SUPPORT",
+    "DESIGN",
+    "DIGITAL MARKETING",
+  ];
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -89,19 +98,35 @@ const Vacancy = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (selectedCategory === "All") {
+      setFilteredPositions(positions);
+    } else {
+      const filtered = positions.filter(
+        (position) => position.category === selectedCategory
+      );
+      setFilteredPositions(filtered);
+    }
+  }, [selectedCategory, positions]);
+
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
   };
 
-  const handleJoinTeamClick = () => {
+  const handlePositionClick = (position) => {
+    setSelectedPosition(position);
     if (careerOpeningsRef.current) {
       careerOpeningsRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
+  const footerRef = useRef(null); // Create a ref for the footer
 
-  const filteredPositions = selectedCategory
-    ? positions.filter((position) => position.category === selectedCategory)
-    : positions;
+  // Scroll to footer function
+  const scrollToFooter = () => {
+    if (footerRef.current) {
+      footerRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   const SpacerBox = styled(Box)({
     height: "30px",
@@ -169,13 +194,13 @@ const Vacancy = () => {
             variant="contained"
             color="primary"
             sx={{ mr: 2, backgroundColor: "#0FB4E8" }}
-            onClick={handleJoinTeamClick}
+            onClick={() => handlePositionClick(null)}
           >
             Join the team
           </Button>
         </Box>
       </Box>
-      handlebars Copy
+
       {/* Benefits Section */}
       <Container sx={{ py: 5 }}>
         <Grid container spacing={4}>
@@ -183,7 +208,7 @@ const Vacancy = () => {
             <Typography
               variant="h4"
               component="h2"
-              color="#001833"
+              color="#00063F"
               sx={{
                 fontWeight: "bold",
                 textAlign: { xs: "center", md: "left" },
@@ -270,10 +295,10 @@ const Vacancy = () => {
                     </Typography>
                   </Box>
                   <Typography variant="body2" component="p">
-                    Continuous learning and professional development are key to
-                    staying ahead in today’s fast-paced world. We offer various
-                    training programs, workshops, and mentorship opportunities
-                    to help you grow your skills and advance your career.
+                    We foster a culture of continuous learning and professional
+                    development. We provide ample opportunities for skill
+                    enhancement, training programs, and career growth to help
+                    you reach your full potential.
                   </Typography>
                 </Paper>
               </Grid>
@@ -291,15 +316,14 @@ const Vacancy = () => {
                       color="#001833"
                       sx={{ fontWeight: "bold" }}
                     >
-                      Upgrade Skills
+                      Timely update
                     </Typography>
                   </Box>
                   <Typography variant="body2" component="p">
-                    In a rapidly evolving industry, staying updated with the
-                    latest skills is crucial. We provide resources and support
-                    for upgrading your skills through certifications, online
-                    courses, and hands-on projects. Be part of a team that
-                    encourages and supports your learning journey.
+                    Staying informed and up-to-date is key to our success. We
+                    prioritize regular updates and communication to keep
+                    everyone aligned, ensuring that you have the latest
+                    information and resources at your fingertips.
                   </Typography>
                 </Paper>
               </Grid>
@@ -307,201 +331,150 @@ const Vacancy = () => {
           </Grid>
         </Grid>
       </Container>
+
+      <SpacerBox />
+
       {/* Career Openings Section */}
       <Container sx={{ py: 5 }}>
-        <Box
-          mt={4}
-          borderBottom="1px solid #000"
-          width={{ xs: "90%", sm: "500px" }}
-          height={2}
-          mx="auto"
-          sx={{ display: { xs: "none", sm: "block" } }}
-        />
-        <SpacerBox />
-        <SpacerBox />
-        <Box
-          width={{ xs: "90%", md: "70%" }}
-          mx="auto"
-          textAlign="center"
-          ref={careerOpeningsRef} // Set ref here
-        >
-          <Typography
-            variant="h4"
-            component="h2"
-            color="#3254A1"
-            sx={{ fontWeight: "bold" }}
-            gutterBottom
-          >
+        <Box width={{ xs: "90%", md: "70%" }} mx="auto" textAlign="center" ref={careerOpeningsRef}>
+          <Box mt={4} borderBottom="1px solid #000" width={{ xs: "90%", sm: "100%", md: "500px" }} height={2} mx={{ xs: 'auto', sm: 'auto', md: '150px' }} />
+          <SpacerBox />
+          <SpacerBox />
+
+          <Typography variant="h4" component="h2" color="#3254A1" sx={{ fontWeight: "bold" }} gutterBottom>
             Career Openings
           </Typography>
           <Typography variant="body1" component="p" gutterBottom>
-            We're always looking for creative, talented self-starters to join
-            the AWURA family. Check out our open roles below and fill out an
-            application.
+            We're always looking for creative, talented self-starters to join the AWURA family. Check out our open roles below and fill out an application.
           </Typography>
         </Box>
         <SpacerBox />
         <SpacerBox />
-        <Grid
-          container
-          spacing={4}
-          sx={{ flexDirection: { xs: "column", md: "row" } }}
-        >
-          <Grid
-            item
-            xs={12}
-            md={3}
-            sx={{ textAlign: { xs: "center", md: "left" } }}
-          >
-            <Typography
-              variant="h6"
-              component="h3"
-              color="#3254A1"
-              ml={{ xs: 0, md: 8 }}
-              sx={{
-                fontWeight: "bold",
-                textDecoration: "underline",
-                textAlign: { xs: "center", md: "left" },
-              }}
-              gutterBottom
-            >
-              CATEGORIES
-            </Typography>
-
-            <List
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: { xs: "center", md: "flex-start" },
-              }}
-            >
-              {[
-                "HT & ADMIN",
-                "ENGINEERING",
-                "SUPPORT",
-                "DESIGN",
-                "DIGITAL MARKETING",
-              ].map((category, index) => (
-                <ListItem
-                  button
-                  key={index}
-                  onClick={() => handleCategoryClick(category)}
-                  sx={{
-                    color: selectedCategory === category ? "#3254A1" : "#000",
-                    textAlign: "center",
-                  }}
-                >
-                  <ListItemText primary={category} />
-                </ListItem>
+        <SpacerBox />
+        
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={3}>
+            <Paper elevation={3} sx={{ padding: 2 }}>
+              <Typography variant="h6" component="h3" color="#3254A1" gutterBottom>
+                CATEGORIES
+              </Typography>
+              <List>
+                {categories.map((category) => (
+                  <ListItem
+                    button
+                    key={category}
+                    onClick={() => handleCategoryClick(category)}
+                    sx={{ color: selectedCategory === category ? '#3254A1' : 'inherit' }}
+                  >
+                    <ListItemText primary={category} />
+                  </ListItem>
+                ))}
+              </List>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} sm={9}>
+            <List>
+              {filteredPositions.map((position, index) => (
+                <React.Fragment key={index}>
+                  <ListItem button onClick={() => handlePositionClick(position)}>
+                    <Box 
+                      sx={{ 
+                        display: 'flex', 
+                        flexDirection: { xs: 'column', sm: 'row' }, 
+                        justifyContent: 'space-between', 
+                        width: '100%',
+                        color: '#3254A1',
+                      }}
+                    >
+                      <Box sx={{ flex: 1, display: { xs: 'flex', sm: 'none' }, mb: 1 }}>
+                        <Typography 
+                          component="span" 
+                          sx={{ 
+                            fontWeight: 'bold', 
+                            color: '#00063F', 
+                            fontSize: '24px' // Bigger font size for mobile
+                          }}
+                        >
+                          {position.title}
+                        </Typography>
+                      </Box>
+                      <Box sx={{ flex: 1, display: { xs: 'none', sm: 'flex' }, mb: 1 }}>
+                        <ListItemText 
+                          primary={
+                            <Typography 
+                              component="span" 
+                              sx={{ 
+                                fontWeight: 'bold', 
+                                color: '#00063F', 
+                                fontSize: '20px' 
+                              }}
+                            >
+                              {position.title}
+                            </Typography>
+                          } 
+                        />
+                      </Box>
+                      <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+                        <Typography component="span" sx={{ color: 'gray', fontSize: '10px', mr: 1 }}>
+                          Experience:
+                        </Typography>
+                        <Typography component="span" sx={{ fontWeight: 'bold', color: '#00063F', fontSize: '20px' }}>
+                          {position.experience} Years
+                        </Typography>
+                      </Box>
+                      <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+                        <Typography component="span" sx={{ color: 'gray', fontSize: '10px', mr: 1 }}>
+                          Deadline:
+                        </Typography>
+                        <Typography component="span" sx={{ fontWeight: 'bold', color: '#00063F' }}>
+                          {position.deadline}
+                        </Typography>
+                      </Box>
+                    </Box>
+                    {/* Arrow Icon with scrollToFooter action */}
+                    <Button onClick={scrollToFooter} sx={{ display: 'flex', alignItems: 'center' }}>
+                      <ArrowForwardIosIcon style={{ color: "#3F51B5" }} />
+                    </Button>
+                  </ListItem>
+                  {index < filteredPositions.length - 1 && <Divider />}
+                </React.Fragment>
               ))}
             </List>
-          </Grid>
-          <Grid
-            item
-            xs={12}
-            md={1}
-            sx={{ display: { xs: "none", md: "block" } }}
-          >
-            <Divider
-              orientation="vertical"
-              sx={{
-                height: "300px",
-                borderColor: "#3254A1",
-                borderRight: "4px solid #3254A1",
-              }}
-            />
-          </Grid>
-          <Grid
-            item
-            xs={12}
-            md={8}
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            {filteredPositions.length > 0 ? (
-              filteredPositions.map((position, index) => (
-                <React.Fragment key={index}>
-                  <Paper
-                    elevation={3}
-                    sx={{
-                      p: 2,
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      mb: 2,
-                      width: "100%",
-                    }}
+            {selectedPosition && (
+              <Box mt={4}>
+                <Typography
+                  variant="h5"
+                  component="h3"
+                  color="#001833"
+                  sx={{ fontWeight: "bold", textAlign: "center", mb: 2 }}
+                >
+                  Apply for {selectedPosition.title} Here
+                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    flexDirection: "column",
+                  }}
+                >
+                  <iframe
+                    src={selectedPosition.link}
+                    width="100%"
+                    height="1000"
+                    frameBorder="0"
+                    marginHeight="0"
+                    marginWidth="0"
                   >
-                    <Box sx={{ flex: 1, textAlign: "center" }}>
-                      <Typography
-                        variant="h6"
-                        component="h4"
-                        color="#001833"
-                        sx={{ fontWeight: "bold" }}
-                      >
-                        {position.title}
-                      </Typography>
-                    </Box>
-                    <Box sx={{ flex: 1, textAlign: "center" }}>
-                      <Typography variant="body2" component="p">
-                        Experience
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        component="p"
-                        color="#001833"
-                        sx={{
-                          fontWeight: "bold",
-                          fontSize: { xs: "14px", md: "18px" },
-                        }} // Adjust font size
-                      >
-                        {position.experience} Years
-                      </Typography>
-                    </Box>
-                    <Box sx={{ flex: 1, textAlign: "center" }}>
-                      <Typography variant="body2" component="p">
-                        Deadline
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        component="p"
-                        color="#001833"
-                        sx={{
-                          fontWeight: "bold",
-                          fontSize: { xs: "14px", md: "18px" },
-                        }} // Adjust font size
-                      >
-                        {position.deadline}
-                      </Typography>
-                    </Box>
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                      <Link
-                        href={position.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        underline="none"
-                      >
-                        <ArrowForwardIosIcon />
-                      </Link>
-                    </Box>
-                  </Paper>
-                  {index < filteredPositions.length - 1 && (
-                    <Divider sx={{ my: 2 }} />
-                  )}
-                </React.Fragment>
-              ))
-            ) : (
-              <Typography variant="body1" color="textSecondary">
-                No positions within this category
-              </Typography>
+                    Loading…
+                  </iframe>
+                </Box>
+              </Box>
             )}
           </Grid>
         </Grid>
       </Container>
+      <SpacerBox />
       <Footer />
     </Box>
   );
