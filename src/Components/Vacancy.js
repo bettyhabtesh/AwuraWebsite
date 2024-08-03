@@ -175,7 +175,7 @@ const Vacancy = () => {
           </Button>
         </Box>
       </Box>
-
+      handlebars Copy
       {/* Benefits Section */}
       <Container sx={{ py: 5 }}>
         <Grid container spacing={4}>
@@ -307,7 +307,6 @@ const Vacancy = () => {
           </Grid>
         </Grid>
       </Container>
-
       {/* Career Openings Section */}
       <Container sx={{ py: 5 }}>
         <Box
