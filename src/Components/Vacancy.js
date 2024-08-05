@@ -11,9 +11,11 @@ import {
   List,
   ListItem,
   ListItemText,
-  Divider,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails
 } from "@mui/material";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import WorkIcon from "@mui/icons-material/Work";
 import SecurityIcon from "@mui/icons-material/Security";
 import SchoolIcon from "@mui/icons-material/School";
@@ -119,13 +121,9 @@ const Vacancy = () => {
       careerOpeningsRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
-  const footerRef = useRef(null); // Create a ref for the footer
-
-  // Scroll to footer function
-  const scrollToFooter = () => {
-    if (footerRef.current) {
-      footerRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
+  const [expanded, setExpanded] = useState(false);
+  const handleAccordionChange = (position) => (event, isExpanded) => {
+    setExpanded(isExpanded ? position : false);
   };
 
   const SpacerBox = styled(Box)({
@@ -332,148 +330,141 @@ const Vacancy = () => {
         </Grid>
       </Container>
 
-      <SpacerBox />
-
       {/* Career Openings Section */}
       <Container sx={{ py: 5 }}>
-        <Box width={{ xs: "90%", md: "70%" }} mx="auto" textAlign="center" ref={careerOpeningsRef}>
-          <Box mt={4} borderBottom="1px solid #000" width={{ xs: "90%", sm: "100%", md: "500px" }} height={2} mx={{ xs: 'auto', sm: 'auto', md: '150px' }} />
-          <SpacerBox />
-          <SpacerBox />
+  <Box width={{ xs: "90%", md: "70%" }} mx="auto" textAlign="center" ref={careerOpeningsRef}>
+    <Box mt={4} borderBottom="1px solid #000" width={{ xs: "90%", sm: "100%", md: "500px" }} height={2} mx={{ xs: 'auto', sm: 'auto', md: '150px' }} />
+    <SpacerBox />
+    <SpacerBox />
+    <Typography variant="h4" component="h2" color="#3254A1" sx={{ fontWeight: "bold" }} gutterBottom>
+      Career Openings
+    </Typography>
+    <Typography variant="body1" component="p" gutterBottom>
+      We're always looking for creative, talented self-starters to join the AWURA family. Check out our open roles below and fill out an application.
+    </Typography>
+  </Box>
+  <SpacerBox />
+  <SpacerBox />
+  <Grid container spacing={2}>
+    <Grid item xs={12} sm={3}>
+      <Paper elevation={3} sx={{ padding: 2 }}>
+        <Typography variant="h6" component="h3" color="#3254A1" gutterBottom>
+          CATEGORIES
+        </Typography>
+        <List>
+          {categories.map((category) => (
+            <ListItem
+              button
+              key={category}
+              onClick={() => handleCategoryClick(category)}
+              sx={{ color: selectedCategory === category ? '#3254A1' : 'inherit' }}
+            >
+              <ListItemText primary={category} />
+            </ListItem>
+          ))}
+        </List>
+      </Paper>
+    </Grid>
 
-          <Typography variant="h4" component="h2" color="#3254A1" sx={{ fontWeight: "bold" }} gutterBottom>
-            Career Openings
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            We're always looking for creative, talented self-starters to join the AWURA family. Check out our open roles below and fill out an application.
-          </Typography>
-        </Box>
-        <SpacerBox />
-        <SpacerBox />
-        <SpacerBox />
-        
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={3}>
-            <Paper elevation={3} sx={{ padding: 2 }}>
-              <Typography variant="h6" component="h3" color="#3254A1" gutterBottom>
-                CATEGORIES
-              </Typography>
-              <List>
-                {categories.map((category) => (
-                  <ListItem
-                    button
-                    key={category}
-                    onClick={() => handleCategoryClick(category)}
-                    sx={{ color: selectedCategory === category ? '#3254A1' : 'inherit' }}
-                  >
-                    <ListItemText primary={category} />
-                  </ListItem>
-                ))}
-              </List>
-            </Paper>
-          </Grid>
-          <Grid item xs={12} sm={9}>
-            <List>
-              {filteredPositions.map((position, index) => (
-                <React.Fragment key={index}>
-                  <ListItem button onClick={() => handlePositionClick(position)}>
-                    <Box 
-                      sx={{ 
-                        display: 'flex', 
-                        flexDirection: { xs: 'column', sm: 'row' }, 
-                        justifyContent: 'space-between', 
-                        width: '100%',
-                        color: '#3254A1',
+    <Grid item xs={12} sm={9}>
+      {filteredPositions.length > 0 ? (
+        <List>
+          {filteredPositions.map((position, index) => (
+            <Accordion key={index} expanded={expanded === position} onChange={handleAccordionChange(position)}>
+              <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: '#3254A1' }} />} aria-controls="panel1a-content" id="panel1a-header">
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: { xs: 'column', sm: 'row' },
+                    justifyContent: 'space-between',
+                    width: '100%',
+                    color: '#3254A1',
+                  }}
+                >
+                  <Box sx={{ flex: 1, display: { xs: 'flex', sm: 'none' }, mb: 1 }}>
+                    <Typography
+                      component="span"
+                      sx={{
+                        fontWeight: 'bold',
+                        color: '#00063F',
+                        fontSize: '24px' 
                       }}
                     >
-                      <Box sx={{ flex: 1, display: { xs: 'flex', sm: 'none' }, mb: 1 }}>
-                        <Typography 
-                          component="span" 
-                          sx={{ 
-                            fontWeight: 'bold', 
-                            color: '#00063F', 
-                            fontSize: '24px' // Bigger font size for mobile
+                      {position.title}
+                    </Typography>
+                  </Box>
+                  <Box sx={{ flex: 1, display: { xs: 'none', sm: 'flex' }, mb: 1 }}>
+                    <ListItemText
+                      primary={
+                        <Typography
+                          component="span"
+                          sx={{
+                            fontWeight: 'bold',
+                            color: '#00063F',
+                            fontSize: '20px'
                           }}
                         >
                           {position.title}
                         </Typography>
-                      </Box>
-                      <Box sx={{ flex: 1, display: { xs: 'none', sm: 'flex' }, mb: 1 }}>
-                        <ListItemText 
-                          primary={
-                            <Typography 
-                              component="span" 
-                              sx={{ 
-                                fontWeight: 'bold', 
-                                color: '#00063F', 
-                                fontSize: '20px' 
-                              }}
-                            >
-                              {position.title}
-                            </Typography>
-                          } 
-                        />
-                      </Box>
-                      <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
-                        <Typography component="span" sx={{ color: 'gray', fontSize: '10px', mr: 1 }}>
-                          Experience:
-                        </Typography>
-                        <Typography component="span" sx={{ fontWeight: 'bold', color: '#00063F', fontSize: '20px' }}>
-                          {position.experience} Years
-                        </Typography>
-                      </Box>
-                      <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
-                        <Typography component="span" sx={{ color: 'gray', fontSize: '10px', mr: 1 }}>
-                          Deadline:
-                        </Typography>
-                        <Typography component="span" sx={{ fontWeight: 'bold', color: '#00063F' }}>
-                          {position.deadline}
-                        </Typography>
-                      </Box>
-                    </Box>
-                    {/* Arrow Icon with scrollToFooter action */}
-                    <Button onClick={scrollToFooter} sx={{ display: 'flex', alignItems: 'center' }}>
-                      <ArrowForwardIosIcon style={{ color: "#3F51B5" }} />
-                    </Button>
-                  </ListItem>
-                  {index < filteredPositions.length - 1 && <Divider />}
-                </React.Fragment>
-              ))}
-            </List>
-            {selectedPosition && (
-              <Box mt={4}>
-                <Typography
-                  variant="h5"
-                  component="h3"
-                  color="#001833"
-                  sx={{ fontWeight: "bold", textAlign: "center", mb: 2 }}
-                >
-                  Apply for {selectedPosition.title} Here
-                </Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    flexDirection: "column",
-                  }}
-                >
-                  <iframe
-                    src={selectedPosition.link}
-                    width="100%"
-                    height="1000"
-                    frameBorder="0"
-                    marginHeight="0"
-                    marginWidth="0"
-                  >
-                    Loading…
-                  </iframe>
+                      }
+                    />
+                  </Box>
+                  <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+                    <Typography component="span" sx={{ color: 'gray', fontSize: '10px', mr: 1 }}>
+                      Experience:
+                    </Typography>
+                    <Typography component="span" sx={{ fontWeight: 'bold', color: '#00063F', fontSize: '20px' }}>
+                      {position.experience} Years
+                    </Typography>
+                  </Box>
+                  <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+                    <Typography component="span" sx={{ color: 'gray', fontSize: '10px', mr: 1 }}>
+                      Deadline:
+                    </Typography>
+                    <Typography component="span" sx={{ fontWeight: 'bold', color: '#00063F' }}>
+                      {position.deadline}
+                    </Typography>
+                  </Box>
                 </Box>
-              </Box>
-            )}
-          </Grid>
-        </Grid>
-      </Container>
+              </AccordionSummary>
+              <AccordionDetails>
+                {expanded === position && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <iframe
+                        src={position.link}
+                        width="100%"
+                        height="1000"
+                        frameBorder="0"
+                        marginHeight="0"
+                        marginWidth="0"
+                      >
+                        Loading…
+                      </iframe>
+                
+                  </Box>
+                )}
+              </AccordionDetails>
+            </Accordion>
+          ))}
+        </List>
+      ) : (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', color:'gray' }}>
+  <Typography variant="body1" component="p" gutterBottom>
+    No positions with this category 
+  </Typography>
+</Box>
+      )}
+    </Grid>
+  </Grid>
+</Container>
+
       <SpacerBox />
       <Footer />
     </Box>

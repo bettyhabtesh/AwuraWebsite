@@ -178,8 +178,8 @@ const ClientCircle = styled.div`
 `;
 
 const ClientImage = styled.img`
-  max-width: 80%;
-  max-height: 80%;
+  max-width: 70%;
+  max-height: 70%;
   object-fit: contain;
 `;
 
