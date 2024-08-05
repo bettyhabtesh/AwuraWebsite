@@ -12,7 +12,7 @@ import {
   useTheme,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { Link as RouterLink, useNavigate, useLocation } from "react-router-dom";
 import logo from "../Assets/logo.svg";
 import styled from "styled-components";
 import { NavLink } from 'react-router-dom';
@@ -24,13 +24,16 @@ const Navbar = ({ homeRef, servicesRef, productsRef, clientsRef }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [activeLink, setActiveLink] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleScrollToSection = (sectionRef, linkName) => {
     setActiveLink(linkName);
-    if (sectionRef?.current) {
-      sectionRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-    } else if (linkName === "Home") {
-      navigate("/");
+    if (location.pathname === "/vacancy") {
+      navigate("/", { state: { scrollTo: linkName } });
+    } else {
+      if (sectionRef?.current) {
+        sectionRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
     }
     setDrawerOpen(false);
   };
@@ -187,14 +190,8 @@ const StyledLink = styled.a`
   margin: 0 15px;
   font-size: 20px;
 
-  &.active {
-    color: black;
-    text-transform: uppercase;
-    font-weight: bold;
-  }
-
   &:hover {
-    color: black;
+    text-decoration: underline;
   }
 `;
 
@@ -204,14 +201,8 @@ const StyledNavLink = styled(NavLink)`
   margin: 0 15px;
   font-size: 20px;
 
-  &.active {
-    color: black;
-    text-transform: uppercase;
-    font-weight: bold;
-  }
-
   &:hover {
-    color: black;
+      text-decoration: underline;
   }
 `;
 

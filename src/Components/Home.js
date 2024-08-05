@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef,useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import yod from "../Assets/yod.png";
 import Services from "./Services";
@@ -7,12 +7,29 @@ import Clients from "./Clients";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { Box } from "@mui/material";
+import { useLocation } from "react-router-dom";
 
 const Home = () => {
   const homeRef = useRef(null);
   const servicesRef = useRef(null);
   const productsRef = useRef(null);
   const clientsRef = useRef(null);
+  const location = useLocation();
+
+
+  useEffect(() => {
+    if (location.state?.scrollTo) {
+      const scrollTo = location.state.scrollTo;
+      if (scrollTo === "Services" && servicesRef.current) {
+        servicesRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else if (scrollTo === "Products" && productsRef.current) {
+        productsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else if (scrollTo === "Clients" && clientsRef.current) {
+        clientsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+  }, [location.state]);
+
 
   return (
     <>

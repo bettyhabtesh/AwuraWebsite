@@ -13,9 +13,9 @@ import {
   ListItemText,
   Accordion,
   AccordionSummary,
-  AccordionDetails
+  AccordionDetails,
 } from "@mui/material";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import WorkIcon from "@mui/icons-material/Work";
 import SecurityIcon from "@mui/icons-material/Security";
 import SchoolIcon from "@mui/icons-material/School";
@@ -76,7 +76,7 @@ const Vacancy = () => {
         .then(() => {
           console.log("Google Sheets API client initialized");
           return window.gapi.client.sheets.spreadsheets.values.get({
-            spreadsheetId: "1lbmVA7_KZLo_tW81r1CX0h8tagT07urpIhkKdWoFfbA",
+            spreadsheetId: "1s5fPKLV1RM7HLNoCs0rUA5Aw97U5sOM6uK8K2hoM2vc",
             range: "Sheet1!A1:E",
           });
         })
@@ -170,7 +170,7 @@ const Vacancy = () => {
           variant="h3"
           component="h1"
           gutterBottom
-          sx={{ fontSize: { xs: "24px", md: "36px" } }}
+          sx={{ fontSize: { xs: "24px", md: "36px" }, fontWeight: "bold" }}
         >
           JOIN US
         </Typography>
@@ -190,7 +190,6 @@ const Vacancy = () => {
         <Box mt={2} textAlign="center">
           <Button
             variant="contained"
-            color="primary"
             sx={{ mr: 2, backgroundColor: "#0FB4E8" }}
             onClick={() => handlePositionClick(null)}
           >
@@ -206,7 +205,7 @@ const Vacancy = () => {
             <Typography
               variant="h4"
               component="h2"
-              color="#00063F"
+              color="#001833"
               sx={{
                 fontWeight: "bold",
                 textAlign: { xs: "center", md: "left" },
@@ -219,6 +218,7 @@ const Vacancy = () => {
             <Typography
               variant="body1"
               component="p"
+              color={"#001833"}
               gutterBottom
               sx={{ textAlign: { xs: "center", md: "left" } }}
             >
@@ -332,138 +332,219 @@ const Vacancy = () => {
 
       {/* Career Openings Section */}
       <Container sx={{ py: 5 }}>
-  <Box width={{ xs: "90%", md: "70%" }} mx="auto" textAlign="center" ref={careerOpeningsRef}>
-    <Box mt={4} borderBottom="1px solid #000" width={{ xs: "90%", sm: "100%", md: "500px" }} height={2} mx={{ xs: 'auto', sm: 'auto', md: '150px' }} />
-    <SpacerBox />
-    <SpacerBox />
-    <Typography variant="h4" component="h2" color="#3254A1" sx={{ fontWeight: "bold" }} gutterBottom>
-      Career Openings
-    </Typography>
-    <Typography variant="body1" component="p" gutterBottom>
-      We're always looking for creative, talented self-starters to join the AWURA family. Check out our open roles below and fill out an application.
-    </Typography>
-  </Box>
-  <SpacerBox />
-  <SpacerBox />
-  <Grid container spacing={2}>
-    <Grid item xs={12} sm={3}>
-      <Paper elevation={3} sx={{ padding: 2 }}>
-        <Typography variant="h6" component="h3" color="#3254A1" gutterBottom>
-          CATEGORIES
-        </Typography>
-        <List>
-          {categories.map((category) => (
-            <ListItem
-              button
-              key={category}
-              onClick={() => handleCategoryClick(category)}
-              sx={{ color: selectedCategory === category ? '#3254A1' : 'inherit' }}
-            >
-              <ListItemText primary={category} />
-            </ListItem>
-          ))}
-        </List>
-      </Paper>
-    </Grid>
+        <Box
+          width={{ xs: "90%", md: "70%" }}
+          mx="auto"
+          textAlign="center"
+          ref={careerOpeningsRef}
+        >
+          <Box
+            mt={4}
+            borderBottom="1px solid #000"
+            width={{ xs: "90%", sm: "100%", md: "500px" }}
+            height={2}
+            mx={{ xs: "auto", sm: "auto", md: "150px" }}
+          />
+          <SpacerBox />
+          <SpacerBox />
+          <Typography
+            variant="h4"
+            component="h2"
+            color="#3254A1"
+            sx={{ fontWeight: "bold" }}
+            gutterBottom
+          >
+            Career Openings
+          </Typography>
+          <Typography variant="body1" component="p" gutterBottom>
+            We're always looking for creative, talented self-starters to join
+            the AWURA family. Check out our open roles below and fill out an
+            application.
+          </Typography>
+        </Box>
+        <SpacerBox />
+        <SpacerBox />
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={3}>
+            <Paper elevation={3} sx={{ padding: 2 }}>
+              <Typography
+                variant="h6"
+                component="h3"
+                color="#3254A1"
+                gutterBottom
+              >
+                CATEGORIES
+              </Typography>
+              <List>
+                {categories.map((category) => (
+                  <ListItem
+                    button
+                    key={category}
+                    onClick={() => handleCategoryClick(category)}
+                    sx={{
+                      color:
+                        selectedCategory === category ? "#3254A1" : "inherit",
+                    }}
+                  >
+                    <ListItemText primary={category} />
+                  </ListItem>
+                ))}
+              </List>
+            </Paper>
+          </Grid>
 
-    <Grid item xs={12} sm={9}>
-      {filteredPositions.length > 0 ? (
-        <List>
-          {filteredPositions.map((position, index) => (
-            <Accordion key={index} expanded={expanded === position} onChange={handleAccordionChange(position)}>
-              <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: '#3254A1' }} />} aria-controls="panel1a-content" id="panel1a-header">
-                <Box
-                  sx={{
-                    display: 'flex',
-                    flexDirection: { xs: 'column', sm: 'row' },
-                    justifyContent: 'space-between',
-                    width: '100%',
-                    color: '#3254A1',
-                  }}
-                >
-                  <Box sx={{ flex: 1, display: { xs: 'flex', sm: 'none' }, mb: 1 }}>
-                    <Typography
-                      component="span"
-                      sx={{
-                        fontWeight: 'bold',
-                        color: '#00063F',
-                        fontSize: '24px' 
-                      }}
+          <Grid item xs={12} sm={9}>
+            {filteredPositions.length > 0 ? (
+              <List>
+                {filteredPositions.map((position, index) => (
+                  <Accordion
+                    key={index}
+                    expanded={expanded === position}
+                    onChange={handleAccordionChange(position)}
+                  >
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon sx={{ color: "#3254A1" }} />}
+                      aria-controls="panel1a-content"
+                      id="panel1a-header"
                     >
-                      {position.title}
-                    </Typography>
-                  </Box>
-                  <Box sx={{ flex: 1, display: { xs: 'none', sm: 'flex' }, mb: 1 }}>
-                    <ListItemText
-                      primary={
-                        <Typography
-                          component="span"
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: { xs: "column", sm: "row" },
+                          justifyContent: "space-between",
+                          width: "100%",
+                          color: "#3254A1",
+                        }}
+                      >
+                        <Box
                           sx={{
-                            fontWeight: 'bold',
-                            color: '#00063F',
-                            fontSize: '20px'
+                            flex: 1,
+                            display: { xs: "flex", sm: "none" },
+                            mb: 1,
                           }}
                         >
-                          {position.title}
-                        </Typography>
-                      }
-                    />
-                  </Box>
-                  <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
-                    <Typography component="span" sx={{ color: 'gray', fontSize: '10px', mr: 1 }}>
-                      Experience:
-                    </Typography>
-                    <Typography component="span" sx={{ fontWeight: 'bold', color: '#00063F', fontSize: '20px' }}>
-                      {position.experience} Years
-                    </Typography>
-                  </Box>
-                  <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
-                    <Typography component="span" sx={{ color: 'gray', fontSize: '10px', mr: 1 }}>
-                      Deadline:
-                    </Typography>
-                    <Typography component="span" sx={{ fontWeight: 'bold', color: '#00063F' }}>
-                      {position.deadline}
-                    </Typography>
-                  </Box>
-                </Box>
-              </AccordionSummary>
-              <AccordionDetails>
-                {expanded === position && (
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        flexDirection: "column",
-                      }}
-                    >
-                      <iframe
-                        src={position.link}
-                        width="100%"
-                        height="1000"
-                        frameBorder="0"
-                        marginHeight="0"
-                        marginWidth="0"
-                      >
-                        Loading…
-                      </iframe>
-                
-                  </Box>
-                )}
-              </AccordionDetails>
-            </Accordion>
-          ))}
-        </List>
-      ) : (
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', color:'gray' }}>
-  <Typography variant="body1" component="p" gutterBottom>
-    No positions with this category 
-  </Typography>
-</Box>
-      )}
-    </Grid>
-  </Grid>
-</Container>
+                          <Typography
+                            component="span"
+                            sx={{
+                              fontWeight: "bold",
+                              color: "#001833",
+                              fontSize: "24px",
+                            }}
+                          >
+                            {position.title}
+                          </Typography>
+                        </Box>
+                        <Box
+                          sx={{
+                            flex: 1,
+                            display: { xs: "none", sm: "flex" },
+                            mb: 1,
+                          }}
+                        >
+                          <ListItemText
+                            primary={
+                              <Typography
+                                component="span"
+                                sx={{
+                                  fontWeight: "bold",
+                                  color: "#001833",
+                                  fontSize: "20px",
+                                }}
+                              >
+                                {position.title}
+                              </Typography>
+                            }
+                          />
+                        </Box>
+                        <Box
+                          sx={{
+                            flex: 1,
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Typography
+                            component="span"
+                            sx={{ color: "gray", fontSize: "10px", mr: 1 }}
+                          >
+                            Experience
+                          </Typography>
+                          <Typography
+                            component="span"
+                            sx={{
+                              fontWeight: "bold",
+                              color: "#001833",
+                              fontSize: "20px",
+                            }}
+                          >
+                            {position.experience} Years
+                          </Typography>
+                        </Box>
+                        <Box
+                          sx={{
+                            flex: 1,
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Typography
+                            component="span"
+                            sx={{ color: "gray", fontSize: "10px", mr: 1 }}
+                          >
+                            Deadline
+                          </Typography>
+                          <Typography
+                            component="span"
+                            sx={{ fontWeight: "bold", color: "#001833" }}
+                          >
+                            {position.deadline}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      {expanded === position && (
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            flexDirection: "column",
+                          }}
+                        >
+                          <iframe
+                            src={position.link}
+                            width="100%"
+                            height="1000"
+                            frameBorder="0"
+                            marginHeight="0"
+                            marginWidth="0"
+                          >
+                            Loading…
+                          </iframe>
+                        </Box>
+                      )}
+                    </AccordionDetails>
+                  </Accordion>
+                ))}
+              </List>
+            ) : (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  color: "gray",
+                }}
+              >
+                <Typography variant="body1" component="p" gutterBottom>
+                  No positions with this category
+                </Typography>
+              </Box>
+            )}
+          </Grid>
+        </Grid>
+      </Container>
 
       <SpacerBox />
       <Footer />

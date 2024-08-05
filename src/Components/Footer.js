@@ -12,7 +12,7 @@ const Footer = ({ homeRef, servicesRef, productsRef, clientsRef }) => {
   };
 
   return (
-    <Box sx={{ bgcolor: '#3F51B5', color: '#FFF', py: 4 }}>
+    <Box sx={{ bgcolor: '#304880', color: '#FFF', py: 4 }}>
       <Container maxWidth="lg">
         <Grid container spacing={4} justifyContent="center">
           <Grid item>
