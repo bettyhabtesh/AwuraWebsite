@@ -44,14 +44,7 @@ const Vacancy = () => {
   const [selectedPosition, setSelectedPosition] = useState(null);
   const [filteredPositions, setFilteredPositions] = useState(positions);
   const careerOpeningsRef = useRef(null);
-  const categories = [
-    "All",
-    "HT & ADMIN",
-    "ENGINEERING",
-    "SUPPORT",
-    "DESIGN",
-    "DIGITAL MARKETING",
-  ];
+  const [categories, setCategories] = useState(["All"]);
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   useEffect(() => {
@@ -91,6 +84,13 @@ const Vacancy = () => {
             link: row[4],
           }));
           setPositions(formattedData);
+
+          // Extract unique categories from the fetched data
+          const uniqueCategories = [
+            "All",
+            ...new Set(formattedData.map((position) => position.category)),
+          ];
+          setCategories(uniqueCategories);
         })
         .catch((error) => {
           console.error("Error fetching data from Google Sheets", error);
