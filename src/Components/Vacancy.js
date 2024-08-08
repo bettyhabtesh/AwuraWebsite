@@ -39,7 +39,7 @@ const loadGapiScript = () => {
   });
 };
 
-const Vacancy = () => {
+const Vacancy = ({ homeRef, servicesRef, productsRef, clientsRef }) => {
   const [positions, setPositions] = useState([]);
   const [selectedPosition, setSelectedPosition] = useState(null);
   const [filteredPositions, setFilteredPositions] = useState(positions);
@@ -547,7 +547,12 @@ const Vacancy = () => {
       </Container>
 
       <SpacerBox />
-      <Footer />
+      <Footer 
+        homeRef={homeRef} 
+        servicesRef={servicesRef} 
+        productsRef={productsRef} 
+        clientsRef={clientsRef} 
+      />
     </Box>
   );
 };

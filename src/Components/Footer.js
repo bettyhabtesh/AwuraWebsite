@@ -1,13 +1,26 @@
 import React from 'react';
 import { Box, Container, Grid, Typography, Link, Divider } from '@mui/material';
+import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 
 const Footer = ({ homeRef, servicesRef, productsRef, clientsRef }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const handleScroll = (ref) => {
     if (ref?.current) {
       ref.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+  
+
+  const handleNavigation = (targetSection) => {
+    if (location.pathname === '/') {
+      handleScroll(targetSection);
+    } else {
+      navigate('/', { state: { scrollTo: targetSection } });
     }
   };
 
@@ -16,16 +29,40 @@ const Footer = ({ homeRef, servicesRef, productsRef, clientsRef }) => {
       <Container maxWidth="lg">
         <Grid container spacing={4} justifyContent="center">
           <Grid item>
-            <Link href="#" onClick={() => handleScroll(homeRef)} color="inherit" underline="none">Home</Link>
+            <RouterLink
+              to="/"
+              style={{ color: 'inherit', textDecoration: 'none' }}
+              onClick={() => handleNavigation(homeRef)}
+            >
+              Home
+            </RouterLink>
           </Grid>
           <Grid item>
-            <Link href="#services" onClick={() => handleScroll(servicesRef)} color="inherit" underline="none">Services</Link>
+            <RouterLink
+              to="/"
+              style={{ color: 'inherit', textDecoration: 'none' }}
+              onClick={() => handleNavigation(servicesRef)}
+            >
+              Services
+            </RouterLink>
           </Grid>
           <Grid item>
-            <Link href="#products" onClick={() => handleScroll(productsRef)} color="inherit" underline="none">Products</Link>
+            <RouterLink
+              to="/"
+              style={{ color: 'inherit', textDecoration: 'none' }}
+              onClick={() => handleNavigation(productsRef)}
+            >
+              Products
+            </RouterLink>
           </Grid>
           <Grid item>
-            <Link href="#clients" onClick={() => handleScroll(clientsRef)} color="inherit" underline="none">Clients</Link>
+            <RouterLink
+              to="/"
+              style={{ color: 'inherit', textDecoration: 'none' }}
+              onClick={() => handleNavigation(clientsRef)}
+            >
+              Clients
+            </RouterLink>
           </Grid>
         </Grid>
         <Divider sx={{ my: 2, bgcolor: '#FFF', width: '50%', mx: 'auto' }} />

@@ -1,6 +1,6 @@
 import React, { useRef,useEffect } from "react";
 import styled, { keyframes } from "styled-components";
-import yod from "../Assets/yod.png";
+import yodd from "../Assets/yodd.png";
 import Services from "./Services";
 import Products from "./Products";
 import Clients from "./Clients";
@@ -8,6 +8,7 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { Box } from "@mui/material";
 import { useLocation } from "react-router-dom";
+
 
 const Home = () => {
   const homeRef = useRef(null);
@@ -56,7 +57,7 @@ const Home = () => {
             />
           </TextContainer>
           <ImageContainer>
-            <StyledImage src={yod} alt="Tech solutions" />
+            <StyledImage src={yodd} alt="Tech solutions" />
           </ImageContainer>
         </Container>
         <Services ref={servicesRef} />

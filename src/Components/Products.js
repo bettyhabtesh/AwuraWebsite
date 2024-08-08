@@ -60,7 +60,7 @@ const Products = React.forwardRef((props, ref) => {
       websiteLink: "https://portal.labexafrica.com/",
     },
     {
-      title: "Discover Farm",
+      title: "Discover MFS",
       description: "Farm is a digital platform designed to streamline the process of agricultural management and coordination.",
       image: farm,
       appStoreLink: "https://www.apple.com/app-store/",
@@ -138,41 +138,45 @@ const Products = React.forwardRef((props, ref) => {
           </Typography>
           <Link href={currentSection.websiteLink} target="_blank" rel="noopener noreferrer">
             <CustomButton variant="contained" sx={{ display: 'block', mx: 'auto' }}>
-              Go to website
+               Go to website
             </CustomButton>
           </Link>
         </Box>
         <Box
           sx={{
-            height: { xs: '200px', sm: '400px' },
-            width: 'auto',
-            mb: { xs: 4, sm: 0 }
+            height: '300px', 
+            width: '300px',
+            mb: { xs: 4, sm: 0 },
+            overflow: 'hidden' 
           }}
         >
           <img
             src={currentSection.image}
             alt="Display"
-            style={{ height: "100%", width: "auto" }}
+            style={{
+              height: "100%",
+              width: "100%",
+              objectFit: "contain" // Fit image within the box
+            }}
           />
-    
         </Box>
       </Box>
       {currentSection.title === "Discover OwlEvents" && (
-  <Box display="flex" justifyContent="center" mt={4}>
-    <LinkButton href={currentSection.googlePlayLink} target="_blank" rel="noopener noreferrer">
-      <img src={googlePlay} alt="Get it on Google Play" />
-      <Typography sx={{ color: '#000', fontSize: { xs: '10px', sm: '12px' } }}>
-        Get it on Google Play
-      </Typography>
-    </LinkButton>
-    <LinkButton href={currentSection.appStoreLink} target="_blank" rel="noopener noreferrer">
-      <img src={appStore} alt="Download on the App Store" />
-      <Typography sx={{ color: '#000', fontSize: { xs: '10px', sm: '12px' } }}>
-        Download on the App Store
-      </Typography>
-    </LinkButton>
-  </Box>
-)}
+        <Box display="flex" justifyContent="center" mt={4}>
+          <LinkButton href={currentSection.googlePlayLink} target="_blank" rel="noopener noreferrer">
+            <img src={googlePlay} alt="Get it on Google Play" />
+            <Typography sx={{ color: '#000', fontSize: { xs: '10px', sm: '12px' } }}>
+              Get it on Google Play
+            </Typography>
+          </LinkButton>
+          <LinkButton href={currentSection.appStoreLink} target="_blank" rel="noopener noreferrer">
+            <img src={appStore} alt="Download on the App Store" />
+            <Typography sx={{ color: '#000', fontSize: { xs: '10px', sm: '12px' } }}>
+              Download on the App Store
+            </Typography>
+          </LinkButton>
+        </Box>
+      )}
       <Box display="flex" justifyContent="center" mt={4}>
         {sections.map((_, index) => (
           <IconButton

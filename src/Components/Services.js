@@ -64,17 +64,14 @@ const Services = React.forwardRef((props, ref) => {
               justifyContent="center"
               p={2}
               sx={{
-                background: "radial-gradient(circle, #4a90e2, #0033cc)",
+                background: "radial-gradient(circle, rgb(74, 144, 226), rgb(0 110 204))",
                 color: "common.white",
                 borderRadius: 3,
                 height: "150px",
                 width: "100%",
                 maxWidth: '400px',
                 margin: "0 auto",
-                fontSize: { xs: '14px', sm: '16px' },
-                '&:hover': {
-                  background: "radial-gradient(circle, #0033cc, #4a90e2)",
-                },
+                fontSize: { xs: '14px', sm: '16px' }
               }}
             >
               <Box display="flex" alignItems="center" gap={2}>
