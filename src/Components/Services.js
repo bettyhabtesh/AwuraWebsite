@@ -33,7 +33,7 @@ const Services = React.forwardRef((props, ref) => {
   };
 
   return (
-    <Box ref={ref} mt={4} textAlign="center">
+    <Box ref={ref} mt={0} textAlign="center">
       <Typography
         variant="h4"
         gutterBottom

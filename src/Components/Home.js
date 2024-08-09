@@ -77,7 +77,7 @@ const Home = () => {
 // Keyframes for the animation
 const comeUp = keyframes`
   0% {
-    transform: translateY(50px);
+    transform: translateY(10px);  
     opacity: 0;
   }
   100% {
@@ -86,20 +86,25 @@ const comeUp = keyframes`
   }
 `;
 
+
 const MainContainer = styled.div`
-  padding-top: 0px;
+ padding-top: 0px; 
+  margin-top: -20px;
 `;
 
 const Container = styled.div`
   display: flex;
   justify-content: space-between;
+  margin-bottom: -230px;  // Adjusted to ensure Services is closer
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: center;
+    margin-bottom: -100px;  // Adjusted for smaller screens
   }
   @media (min-width: 769px) and (max-width: 1024px) {
     flex-direction: column;
     align-items: center;
+    margin-bottom: -100px;  // Adjusted for medium screens
   }
 `;
 
@@ -167,26 +172,31 @@ const ImageContainer = styled.div`
   max-width: 70%;
   @media (max-width: 768px) {
     max-width: 90%;
-    margin-top: 20px;
+  
   }
   @media (min-width: 769px) and (max-width: 1024px) {
     max-width: 80%;
-    margin-top: 20px;
+   
   }
 `;
 
 const StyledImage = styled.img`
-  width: 650px;
-  height: 500px;
+  width: 900px;
+  height: 900px;
   animation: ${comeUp} 1s ease-out;
+  transform: translateY(-230px);  // Adjusted to start closer to the final position
+  
   @media (max-width: 768px) {
     width: 100%;
     height: auto;
+    transform: translateY(-100px);  // Adjust for smaller screens
   }
   @media (min-width: 769px) and (max-width: 1024px) {
     width: 80%;
     height: auto;
+    transform: translateY(-150px);  // Adjust for medium screens
   }
 `;
+
 
 export default Home;
