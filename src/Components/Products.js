@@ -61,7 +61,7 @@ const Products = React.forwardRef((props, ref) => {
     },
     {
       title: "Discover MFS",
-      description: "Farm is a digital platform designed to streamline the process of agricultural management and coordination.",
+      description: "MFS is a digital platform designed to streamline the process of agricultural management and coordination.",
       image: farm,
       appStoreLink: "https://www.apple.com/app-store/",
       googlePlayLink: "https://play.google.com/store",
@@ -69,7 +69,7 @@ const Products = React.forwardRef((props, ref) => {
     },
     {
       title: "Discover Meklit",
-      description: "Meklit is a digital platform designed to streamline various processes in different industries.",
+      description: "Meklit is a digital platform designed to streamline various health conditions regarding women and children.",
       image: meklit,
       appStoreLink: "https://www.apple.com/app-store/",
       googlePlayLink: "https://play.google.com/store",
